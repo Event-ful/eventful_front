@@ -25,6 +25,13 @@ export default function Sidebar() {
         >
           <h2 className="font-semibold"> 회원가입</h2>
         </Link>
+        <Link
+          to={'shared_components'}
+          className={`block rounded-[8px] px-3 py-[10px] text-gray-600
+         ${isActive('shared_components') ? 'bg-[#F1FDFA] text-gray-950' : 'hover:bg-[#F1FDFA]'}`}
+        >
+          <h2 className="font-semibold">샘플</h2>
+        </Link>
       </div>
       <div className="border-t border-gray-200 p-4 mt-auto">
         <div className="space-y-3">
