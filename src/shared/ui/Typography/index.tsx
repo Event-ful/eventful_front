@@ -33,8 +33,8 @@ export const Body4Emphasized = ({ children, className }: TypographyProps) => <p 
 export const Body3Underlined = ({ children, className }: TypographyProps) => <p className={`font-light underline text-[10px] leading-[20px] ${className}`}>{children}</p>;
 
 // Button
-export const Button1 = ({ children, className }: TypographyProps) => <button className={`font-semibold text-[16px] leading-[auto] ${className}`}>{children}</button>;
+export const Button1 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[16px] leading-[auto] ${className}`}>{children}</span>;
 
-export const Button2 = ({ children, className }: TypographyProps) => <button className={`font-semibold text-[14px] leading-[21px] ${className}`}>{children}</button>;
+export const Button2 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[14px] leading-[21px] ${className}`}>{children}</span>;
 
-export const Button3 = ({ children, className }: TypographyProps) => <button className={`font-semibold text-[10px] leading-[auto] ${className}`}>{children}</button>;
+export const Button3 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[10px] leading-[auto] ${className}`}>{children}</span>;
