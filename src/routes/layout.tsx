@@ -11,12 +11,12 @@ export default function Layout() {
           <span className="text-sm font-medium bg-[#009689] text-white px-4 py-1 rounded-[8px]">낙현</span>
         </div>
       </div>
-      <div className="flex gap-4">
+      <div className="flex">
         <div className="w-[240px] h-[calc(100vh-50px)] border-r border-gray-300">
           <Sidebar />
         </div>
 
-        <div className="content">
+        <div className="content flex-1 h-[calc(100vh-50px)]">
           <Outlet />
         </div>
       </div>
