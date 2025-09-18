@@ -5,7 +5,7 @@ import SharedComponents from '../pages/shared.page';
 
 export const routes = [
   {
-    element: <Layout />,
+    element: <Layout isSidebar={true} />,
     path: '/',
     children: [
       {
@@ -13,12 +13,18 @@ export const routes = [
         path: 'home',
       },
       {
-        element: <SignUp />,
-        path: 'sign_up',
-      },
-      {
         element: <SharedComponents />,
         path: 'shared_components',
+      },
+    ],
+  },
+  {
+    element: <Layout isSidebar={false} />,
+    path: '/',
+    children: [
+      {
+        element: <SignUp />,
+        path: 'sign_up',
       },
     ],
   },
