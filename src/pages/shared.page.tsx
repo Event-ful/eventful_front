@@ -8,7 +8,9 @@ export default function SharedComponents() {
   const [text, setText] = useState('');
   const [texts, setTexts] = useState('');
   const [nickname, setNickname] = useState('');
-  const [status, setStatus] = useState<'success' | 'error'>();
+  /** 메시지 표시 상태 ('default': 기본, 'success': 성공, 'error': 오류) */
+  const [status, setStatus] = useState<'success' | 'error' | 'default'>('default');
+  /** 오류 또는 성공 메시지 내용 */
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleCheck = () => {
@@ -25,6 +27,20 @@ export default function SharedComponents() {
       setStatus('success');
       setErrorMessage('사용 가능한 닉네임입니다.');
     }
+  };
+
+  const getMessageColor = () => {
+    if (status === 'error') return 'text-red-200';
+    if (status === 'success') return 'text-blue-300';
+    if (status === 'default') return 'text-black-300';
+    return 'text-black-300';
+  };
+
+  const getMessage = () => {
+    if (status === 'error') return errorMessage;
+    if (status === 'success') return errorMessage;
+    if (status === 'default') return '';
+    return '';
   };
 
   return (
@@ -54,14 +70,14 @@ export default function SharedComponents() {
       </section>
 
       {/* Input */}
-      <section className="space-y-4 p-4 border rounded bg-gray-50">
+      <section className="space-y-4 p-4 border rounded">
         <Title1>Input 컴포넌트</Title1>
         <Input value={inputText} onChange={setInputText} placeholder="input 샘플 메세지를 입력하세요" maxLength={5} />
         <Input value={inputText} onChange={setInputText} placeholder="글자수 제한 없음" />
       </section>
 
       {/* Textarea  */}
-      <section className="space-y-4 p-4 border rounded bg-gray-50">
+      <section className="space-y-4 p-4 border rounded">
         <Title1>Textarea 컴포넌트</Title1>
 
         <div>
@@ -83,14 +99,18 @@ export default function SharedComponents() {
               setNickname(val);
               if (status === 'error' && errorMessage === '필수 입력 사항입니다.') {
                 setErrorMessage('');
-                setStatus(undefined);
+                setStatus('default');
               }
             }}
             placeholder="닉네임 입력 (user1: 중복된 닉네임)"
-            status={status}
-            errorMessage={status === 'error' ? errorMessage : undefined}
-            successMessage={status === 'success' ? errorMessage : undefined}
           />
+
+          {status !== 'default' && (
+            <div className="mt-[4px]">
+              <p className={`ml-[2px] font-regular text-[12px] ${getMessageColor()}`}>{getMessage()}</p>
+            </div>
+          )}
+
           <button onClick={handleCheck} className="mt-2 px-4 py-2 bg-blue-500 text-white-50 rounded">
             확인
           </button>
