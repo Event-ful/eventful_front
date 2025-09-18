@@ -37,4 +37,4 @@ export const Button1 = ({ children, className }: TypographyProps) => <span class
 
 export const Button2 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[14px] leading-[21px] ${className}`}>{children}</span>;
 
-export const Button3 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[10px] leading-[auto] ${className}`}>{children}</span>;
+export const Button3 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[12px] leading-[auto] ${className}`}>{children}</span>;

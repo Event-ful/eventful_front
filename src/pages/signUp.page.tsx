@@ -1,3 +1,5 @@
+import SignUpForm from '@/features/auth/presentation/signup/SignUpForm';
+
 export default function SignUp() {
-  return <div>회원가입 화면입니다.</div>;
+  return <SignUpForm />;
 }

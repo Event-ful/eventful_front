@@ -88,6 +88,7 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
             bg-white-50 border-[1px] transition-colors
             font-regular text-[14px] leading-[14px]
             focus:outline-none
+            overflow-hidden
             ${getBorderColor()}
             ${getTextColor()}
             placeholder:text-black-300 placeholder:font-regular placeholder:text-[14px]
@@ -102,7 +103,7 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
               e.preventDefault();
               clearText();
             }}
-            className="absolute right-[5px] top-[6px] p-1 rounded transition-colors"
+            className="absolute right-[5px] top-[8px] p-1 rounded transition-colors"
             type="button"
             aria-label="입력 내용 삭제"
           >

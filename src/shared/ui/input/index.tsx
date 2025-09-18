@@ -99,7 +99,7 @@ export const Input = ({ className, value, onChange, height, placeholder, maxLeng
               e.preventDefault();
               clearText();
             }}
-            className="absolute right-[5px] top-[6px] p-1 rounded transition-colors"
+            className="absolute right-[5px] top-[10px] p-1 rounded transition-colors"
             type="button"
             aria-label="입력 내용 삭제"
           >
