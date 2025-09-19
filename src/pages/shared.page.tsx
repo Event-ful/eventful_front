@@ -45,6 +45,14 @@ export default function SharedComponents() {
     return '';
   };
 
+  const handleGroupCardClick = () => {
+    console.log('그룹 상세 페이지로 이동');
+  };
+
+  const handleEventCardClick = () => {
+    console.log('이벤트 상세 페이지로 이동');
+  };
+
   return (
     <div className="space-y-8 p-6">
       {/* 타이포그래피 */}
@@ -121,9 +129,15 @@ export default function SharedComponents() {
 
       <section className="space-y-4 p-4 border rounded">
         <Title1>카드 컴포넌트</Title1>
-        <GroupCard id={1} title="우리끼리 골프" description="Welcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임" member={30} img="" />
+        <GroupCard title="우리끼리 골프" description="Welcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임" member={30} img="" onGroupCardClick={handleGroupCardClick} />
         <div className="w-[25%] mb-2">
-          <EventCard id={3} title="동산 사이드 프로젝트 쫑파티" groupName="동산" dayCounts={40} description="사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미 갈이 일정 잡아봐요~~" />
+          <EventCard
+            title="동산 사이드 프로젝트 쫑파티"
+            groupName="동산"
+            dayCounts={40}
+            description="사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미 갈이 일정 잡아봐요~~"
+            onEventCardClick={handleEventCardClick}
+          />
         </div>
       </section>
     </div>

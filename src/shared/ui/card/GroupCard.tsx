@@ -2,24 +2,16 @@ import { Body2, Body4, Button2, Title2 } from '../typography';
 import Member from '@/assets/svg/member.svg';
 import RightArrow from '@/assets/svg/right-arrow.svg';
 import DefaultGroupImage from '@/assets/img/group.png';
-import { useNavigate } from 'react-router-dom';
 
 interface GroupCardProps {
-  id: number;
   title: string;
   description: string;
   member: number;
   img: string;
+  onGroupCardClick?: () => void;
 }
 
-export const GroupCard = ({ id, title, description, member, img }: GroupCardProps) => {
-  const navigate = useNavigate();
-
-  const goToGroupDetail = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigate(`/group/${id}`);
-  };
-
+export const GroupCard = ({ title, description, member, img, onGroupCardClick }: GroupCardProps) => {
   return (
     <div className="bg-white-100 w-[260px] flex-shrink-0 rounded-xl shadow-md border border-black-200 p-[14px] flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
       <div className="border w-full h-[150px] overflow-hidden flex-shrink-0">
@@ -38,7 +30,7 @@ export const GroupCard = ({ id, title, description, member, img }: GroupCardProp
             <Body4>{member}명</Body4>
           </div>
 
-          <div className="y-center gap-1 text-green-500 font-medium cursor-pointer" onClick={goToGroupDetail}>
+          <div className="y-center gap-1 text-green-500 font-medium cursor-pointer" onClick={onGroupCardClick}>
             <Button2>그룹 페이지로 이동</Button2>
             <img src={RightArrow} alt="오른쪽 화살표" className="w-3 h-3" />
           </div>
