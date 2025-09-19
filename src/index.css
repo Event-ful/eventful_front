@@ -12,9 +12,9 @@ body {
 }
 
 .x-center {
-  @apply flex items-center;
+  @apply flex justify-center;
 }
 
 .y-center {
-  @apply flex justify-center;
+  @apply flex items-center;
 }

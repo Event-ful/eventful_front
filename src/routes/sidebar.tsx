@@ -38,7 +38,7 @@ export default function Sidebar() {
           {/* 서비스 정보 */}
           <div>
             <p className="text-xs text-gray-600 mb-1">Eventful 소개</p>
-            <div className="x-center gap-1">
+            <div className="y-center gap-1">
               <Link to="/terms" className="block text-xs text-gray-600 hover:text-gray-800 hover:underline">
                 이용약관 ·
               </Link>
