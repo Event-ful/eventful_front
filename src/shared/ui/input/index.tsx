@@ -9,6 +9,7 @@ interface InputProps {
   className?: string;
   /** 최대 입력 가능한 글자 수 */
   maxLength?: number;
+  status?: 'default' | 'success' | 'error';
 }
 
 /**
@@ -20,7 +21,15 @@ interface InputProps {
  * - 최대 글자 수 제한 및 카운터 표시
  *
  */
-export const Input = ({ className, value, onChange, height, placeholder, maxLength }: InputProps) => {
+export const Input = ({
+  className,
+  value,
+  onChange,
+  height,
+  placeholder,
+  maxLength,
+  status,
+}: InputProps) => {
   /** 입력 필드의 포커스 상태 */
   const [isFocused, setIsFocused] = useState(false);
   /** 입력 필드 DOM 요소 참조 */
@@ -56,6 +65,7 @@ export const Input = ({ className, value, onChange, height, placeholder, maxLeng
    * @returns Tailwind CSS 보더 색상 클래스
    */
   const getBorderColor = () => {
+    if (status === 'error') return 'border-red-200';
     if (isFocused || isTyping) return 'border-black-300';
     return 'border-black-200';
   };
@@ -110,7 +120,9 @@ export const Input = ({ className, value, onChange, height, placeholder, maxLeng
 
       {/* 최대 글자 수가 설정된 경우 글자 수 카운터 표시 */}
       {maxLength && (
-        <div className={`mt-[4px] text-right text-[12px] font-regular ${value.length == maxLength ? 'text-red-200' : 'text-black-300'}`}>
+        <div
+          className={`mt-[4px] text-right text-[12px] font-regular ${value.length == maxLength ? 'text-red-200' : 'text-black-300'}`}
+        >
           {value.length} / {maxLength}
         </div>
       )}

@@ -7,9 +7,20 @@ import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
 import { useNickname } from './hooks/useNickname';
 import { useEmail } from './hooks/useEmail';
 import { usePassword } from './hooks/usePassword';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpForm() {
-  const { nickname, status: nicknameStatus, isChecked, handleChange: handleNicknameChange, checkAvailability, getMessage: getNicknameMessage } = useNickname();
+  const navigate = useNavigate();
+
+  const {
+    nickname,
+    status: nicknameStatus,
+    isChecked,
+    isButtonDisabled,
+    handleChange: handleNicknameChange,
+    checkAvailability,
+    getMessage: getNicknameMessage,
+  } = useNickname();
 
   const {
     email,
@@ -30,16 +41,35 @@ export default function SignUpForm() {
     formatTime,
   } = useEmail();
 
-  const { password, passwordStatus, passwordConfirm, passwordConfirmStatus, handlePasswordChange, handlePasswordConfirmChange, getPasswordMessage, getPasswordConfirmMessage } = usePassword();
+  const {
+    password,
+    passwordStatus,
+    passwordConfirm,
+    passwordConfirmStatus,
+    handlePasswordChange,
+    handlePasswordConfirmChange,
+    getPasswordMessage,
+    getPasswordConfirmMessage,
+  } = usePassword();
 
   /** 전체 폼 유효성 검사 */
-  const isFormValid = () => nicknameStatus === 'success' && isChecked && emailStatus === 'success' && isVerified && passwordStatus === 'success' && passwordConfirmStatus === 'success';
+  const isFormValid = () =>
+    nicknameStatus === 'success' &&
+    isChecked &&
+    emailStatus === 'success' &&
+    isVerified &&
+    passwordStatus === 'success' &&
+    passwordConfirmStatus === 'success';
 
   /** 메시지 색상 */
   const getMessageColor = (status: 'default' | 'success' | 'error') => {
     if (status === 'error') return 'text-red-200';
     if (status === 'success') return 'text-blue-300';
     return 'text-black-300';
+  };
+
+  const handleGoHome = () => {
+    navigate('/home');
   };
 
   return (
@@ -55,7 +85,13 @@ export default function SignUpForm() {
               <span className="text-red-200">*</span>
             </div>
             <div className="flex gap-2">
-              <Input value={nickname} onChange={handleNicknameChange} placeholder="닉네임을 입력하세요" className="flex-1" />
+              <Input
+                value={nickname}
+                onChange={handleNicknameChange}
+                placeholder="닉네임을 입력하세요"
+                className="flex-1"
+                status={nicknameStatus}
+              />
               {/* 닉네임 중복검사 결과에 따른 버튼/아이콘 표시 */}
               {isChecked ? (
                 <div className="h-[39px] flex items-center justify-center px-2">
@@ -69,8 +105,8 @@ export default function SignUpForm() {
                 <button
                   type="button"
                   onClick={checkAvailability}
-                  disabled={nickname.length === 0}
-                  className={`h-[39px] px-4 rounded whitespace-nowrap ${nickname.length === 0 ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'}`}
+                  disabled={isButtonDisabled}
+                  className={`h-[39px] px-4 rounded whitespace-nowrap ${isButtonDisabled ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'}`}
                 >
                   <Button3>중복검사</Button3>
                 </button>
@@ -79,7 +115,9 @@ export default function SignUpForm() {
             {/* 닉네임 중복검사 결과에 따른 메세지 표시 */}
             {isChecked && nicknameStatus !== 'default' && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(nicknameStatus)}`}>{getNicknameMessage()}</Body4>
+                <Body4 className={`ml-[2px] ${getMessageColor(nicknameStatus)}`}>
+                  {getNicknameMessage()}
+                </Body4>
               </div>
             )}
           </div>
@@ -91,7 +129,13 @@ export default function SignUpForm() {
               <span className="text-red-200">*</span>
             </div>
             <div className="flex gap-2 mb-2">
-              <Input value={email} onChange={handleEmailChange} placeholder="이메일을 입력하세요" className="flex-1" />
+              <Input
+                value={email}
+                onChange={handleEmailChange}
+                placeholder="이메일을 입력하세요"
+                className="flex-1"
+                status={emailStatus}
+              />
               {!isSent ? (
                 <button
                   type="button"
@@ -107,7 +151,9 @@ export default function SignUpForm() {
                   onClick={handleResendVerification}
                   disabled={emailStatus !== 'success' || (timer > 0 && !isTimerExpired)}
                   className={`h-[39px] px-3 rounded whitespace-nowrap ${
-                    emailStatus !== 'success' || (timer > 0 && !isTimerExpired) ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'
+                    emailStatus !== 'success' || (timer > 0 && !isTimerExpired)
+                      ? 'bg-black-300 text-white-50 cursor-not-allowed'
+                      : 'bg-green-400 text-white-50 hover:bg-green-500'
                   }`}
                 >
                   <Button3>재전송</Button3>
@@ -117,7 +163,9 @@ export default function SignUpForm() {
             {/* 이메일 형식에 따른 메세지 표시 */}
             {emailStatus === 'error' && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(emailStatus)}`}>{getEmailMessage()}</Body4>
+                <Body4 className={`ml-[2px] ${getMessageColor(emailStatus)}`}>
+                  {getEmailMessage()}
+                </Body4>
               </div>
             )}
 
@@ -125,7 +173,13 @@ export default function SignUpForm() {
             {isSent && (
               <div className="mt-2">
                 <div className="flex gap-2">
-                  <Input value={verificationCode} onChange={handleVerificationCodeChange} placeholder="인증번호를 입력하세요" className="w-[250px]" />
+                  <Input
+                    value={verificationCode}
+                    onChange={handleVerificationCodeChange}
+                    placeholder="인증번호를 입력하세요"
+                    className="w-[250px]"
+                    status={verificationStatus}
+                  />
                   {/* 인증이 완료된 경우에만 체크 아이콘 표시, 그 외에는 인증하기 버튼 표시 */}
                   {isVerified ? (
                     <div className="h-[39px] flex items-center justify-center px-2">
@@ -137,7 +191,9 @@ export default function SignUpForm() {
                       onClick={handleVerifyCode}
                       disabled={verificationCode.length === 0}
                       className={`h-[39px] px-4 rounded whitespace-nowrap ${
-                        verificationCode.length === 0 ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'
+                        verificationCode.length === 0
+                          ? 'bg-black-300 text-white-50 cursor-not-allowed'
+                          : 'bg-green-400 text-white-50 hover:bg-green-500'
                       }`}
                     >
                       <Button3>인증하기</Button3>
@@ -153,7 +209,9 @@ export default function SignUpForm() {
                 {/* 이메일 인증 번호 검증에 따른 메세지 표시 */}
                 {verificationStatus !== 'default' && (
                   <div className="mt-[4px]">
-                    <Body4 className={`ml-[2px] ${getMessageColor(verificationStatus)}`}>{getVerificationMessage()}</Body4>
+                    <Body4 className={`ml-[2px] ${getMessageColor(verificationStatus)}`}>
+                      {getVerificationMessage()}
+                    </Body4>
                   </div>
                 )}
               </div>
@@ -166,27 +224,45 @@ export default function SignUpForm() {
               <Title3 className="text-black-400">비밀번호</Title3>
               <span className="text-red-200">*</span>
             </div>
-            <Input value={password} onChange={handlePasswordChange} placeholder="비밀번호를 입력하세요" />
+            <Input
+              value={password}
+              onChange={handlePasswordChange}
+              placeholder="비밀번호를 입력하세요"
+              status={passwordStatus}
+            />
             {/* 비밀번호 유효성 검사에 따른 메세지 표시 */}
             {passwordStatus === 'error' && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(passwordStatus)}`}>{getPasswordMessage()}</Body4>
+                <Body4 className={`ml-[2px] ${getMessageColor(passwordStatus)}`}>
+                  {getPasswordMessage()}
+                </Body4>
               </div>
             )}
 
             <div className="mt-2">
-              <Input value={passwordConfirm} onChange={handlePasswordConfirmChange} placeholder="비밀번호를 다시 한 번 입력하세요" />
+              <Input
+                value={passwordConfirm}
+                onChange={handlePasswordConfirmChange}
+                placeholder="비밀번호를 다시 한 번 입력하세요"
+                status={passwordConfirmStatus}
+              />
               {/* 비밀번호 일치 확인 메세지 표시 */}
               {passwordConfirmStatus === 'error' && (
                 <div className="mt-[4px]">
-                  <Body4 className={`ml-[2px] ${getMessageColor(passwordConfirmStatus)}`}>{getPasswordConfirmMessage()}</Body4>
+                  <Body4 className={`ml-[2px] ${getMessageColor(passwordConfirmStatus)}`}>
+                    {getPasswordConfirmMessage()}
+                  </Body4>
                 </div>
               )}
             </div>
           </div>
 
           <div className="w-full flex gap-3 pt-4">
-            <button type="button" className="w-full p-3 border border-black-200 text-black-400 rounded hover:bg-white-100 ">
+            <button
+              type="button"
+              className="w-full p-3 border border-black-200 text-black-400 rounded hover:bg-white-100"
+              onClick={handleGoHome}
+            >
               <Button2>취소</Button2>
             </button>
             <button

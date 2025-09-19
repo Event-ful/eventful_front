@@ -92,7 +92,13 @@ export const useEmail = () => {
    * 인증번호 입력 변경 처리
    * @param value 사용자 입력 인증번호
    */
-  const handleVerificationCodeChange = (value: string) => setVerificationCode(value);
+  const handleVerificationCodeChange = (value: string) => {
+    setVerificationCode(value);
+    if (verificationStatus !== 'default') {
+      setVerificationStatus('default');
+      setIsVerified(false);
+    }
+  };
 
   /**
    * 인증번호 확인
@@ -130,7 +136,10 @@ export const useEmail = () => {
    */
   const getVerificationMessage = () => {
     if (isTimerExpired) return '인증 시간이 만료되었습니다.';
-    if (verificationStatus === 'error') return verificationCode.length === 0 ? '인증번호를 입력해주세요.' : '인증번호가 올바르지 않습니다.';
+    if (verificationStatus === 'error')
+      return verificationCode.length === 0
+        ? '인증번호를 입력해주세요.'
+        : '인증번호가 올바르지 않습니다.';
     if (verificationStatus === 'success') return '인증이 완료되었습니다.';
     return '';
   };
