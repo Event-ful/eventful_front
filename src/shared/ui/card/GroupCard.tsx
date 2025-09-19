@@ -32,13 +32,13 @@ export const GroupCard = ({ id, title, description, member, img }: GroupCardProp
           <Body2 className="text-black-400 whitespace-pre-wrap">{description}</Body2>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
+        <div className="x-center justify-between">
+          <div className="x-center gap-1">
             <img src={Member} alt="멤버 수" className="w-4 h-4" />
             <Body4>{member}명</Body4>
           </div>
 
-          <div className="flex items-center gap-1 text-green-500 font-medium cursor-pointer" onClick={goToGroupDetail}>
+          <div className="x-center gap-1 text-green-500 font-medium cursor-pointer" onClick={goToGroupDetail}>
             <Button2>그룹 페이지로 이동</Button2>
             <img src={RightArrow} alt="오른쪽 화살표" className="w-3 h-3" />
           </div>
