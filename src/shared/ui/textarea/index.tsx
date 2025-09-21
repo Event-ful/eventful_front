@@ -9,6 +9,7 @@ interface TextareaProps {
   className?: string;
   /** 최대 입력 가능한 글자 수 */
   maxLength?: number;
+  status?: 'default' | 'success' | 'error';
 }
 
 /**
@@ -21,7 +22,15 @@ interface TextareaProps {
  * - 최대 글자 수 제한 및 카운터 표시 지원
  *
  */
-export const Textarea = ({ className, value, onChange, height, placeholder, maxLength }: TextareaProps) => {
+export const Textarea = ({
+  className,
+  value,
+  onChange,
+  height,
+  placeholder,
+  maxLength,
+  status,
+}: TextareaProps) => {
   /** 텍스트 영역의 포커스 상태 */
   const [isFocused, setIsFocused] = useState(false);
   /** 텍스트 영역 DOM 요소 참조 */
@@ -57,6 +66,7 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
    * @returns Tailwind CSS 보더 색상 클래스
    */
   const getBorderColor = () => {
+    if (status === 'error') return 'border-red-200';
     if (isFocused || isTyping) return 'border-black-300';
     return 'border-black-200';
   };
@@ -88,6 +98,7 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
             bg-white-50 border-[1px] transition-colors
             font-regular text-[14px] leading-[14px]
             focus:outline-none
+            overflow-hidden
             ${getBorderColor()}
             ${getTextColor()}
             placeholder:text-black-300 placeholder:font-regular placeholder:text-[14px]
@@ -102,7 +113,7 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
               e.preventDefault();
               clearText();
             }}
-            className="absolute right-[5px] top-[6px] p-1 rounded transition-colors"
+            className="absolute right-[5px] top-[8px] p-1 rounded transition-colors"
             type="button"
             aria-label="입력 내용 삭제"
           >
@@ -113,7 +124,9 @@ export const Textarea = ({ className, value, onChange, height, placeholder, maxL
 
       {/* 최대 글자 수가 설정된 경우 글자 수 카운터 표시 */}
       {maxLength && (
-        <div className={`mt-[4px] text-right text-[12px] font-regular ${value.length == maxLength ? 'text-red-200' : 'text-black-300'}`}>
+        <div
+          className={`mt-[4px] text-right text-[12px] font-regular ${value.length == maxLength ? 'text-red-200' : 'text-black-300'}`}
+        >
           {value.length} / {maxLength}
         </div>
       )}
