@@ -90,6 +90,11 @@ export const Textarea = ({
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
           placeholder={isFocused || isTyping ? '' : placeholder}
           rows={1}
           style={{ height }}
