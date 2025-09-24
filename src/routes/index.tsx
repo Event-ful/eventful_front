@@ -2,6 +2,7 @@ import SignUp from '@/pages/signUp.page';
 import Home from '../pages/home.page';
 import Layout from './layout';
 import SharedComponents from '../pages/shared.page';
+import NewGroup from '@/pages/newGroup.page';
 
 export const routes = [
   {
@@ -15,6 +16,10 @@ export const routes = [
       {
         element: <SharedComponents />,
         path: 'shared_components',
+      },
+      {
+        element: <NewGroup />,
+        path: 'new_group',
       },
     ],
   },

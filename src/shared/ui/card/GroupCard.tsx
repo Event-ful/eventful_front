@@ -21,7 +21,7 @@ export const GroupCard = ({ title, description, member, img, onGroupCardClick }:
       <div className="flex flex-col justify-between flex-1">
         <div className="px-1 my-3">
           <Title2 className="text-black-400 mb-1">{title}</Title2>
-          <Body2 className="text-black-400 whitespace-pre-wrap">{description}</Body2>
+          <Body2 className="text-black-400 text-2line">{description}</Body2>
         </div>
 
         <div className="y-center justify-between">
