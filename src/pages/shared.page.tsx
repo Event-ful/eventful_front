@@ -1,7 +1,23 @@
 import { useState } from 'react';
 import { Textarea } from '@/shared/ui/textarea';
 import { Input } from '@/shared/ui/input';
-import { Title1, Title2, Title3, Title4, Headline1, Headline2, Body1, Body2, Body4, Body5, Body4Emphasized, Body3Underlined, Button1, Button2, Button3 } from '@/shared/ui/typography';
+import {
+  Title1,
+  Title2,
+  Title3,
+  Title4,
+  Headline1,
+  Headline2,
+  Body1,
+  Body2,
+  Body4,
+  Body5,
+  Body4Emphasized,
+  Body3Underlined,
+  Button1,
+  Button2,
+  Button3,
+} from '@/shared/ui/typography';
 import { GroupCard } from '@/shared/ui/card/GroupCard';
 import { EventCard } from '@/shared/ui/card/EventCard';
 
@@ -82,8 +98,17 @@ export default function SharedComponents() {
       {/* Input */}
       <section className="space-y-4 p-4 border rounded">
         <Title1>Input 컴포넌트</Title1>
-        <Input value={inputText} onChange={setInputText} placeholder="input 샘플 메세지를 입력하세요" maxLength={5} />
-        <Input value={inputText} onChange={setInputText} placeholder="글자수 제한 없음" />
+        <Input
+          value={inputText}
+          onChange={e => setInputText(e.target.value)}
+          placeholder="input 샘플 메세지를 입력하세요"
+          maxLength={5}
+        />
+        <Input
+          value={inputText}
+          onChange={e => setInputText(e.target.value)}
+          placeholder="글자수 제한 없음"
+        />
       </section>
 
       {/* Textarea  */}
@@ -92,13 +117,23 @@ export default function SharedComponents() {
 
         <div>
           <Title3>기본 Textarea</Title3>
-          <Textarea value={text} onChange={setText} placeholder="textarea 샘플 메세지를 입력하세요" maxLength={20} />
+          <Textarea
+            value={text}
+            onChange={setText}
+            placeholder="textarea 샘플 메세지를 입력하세요"
+            maxLength={20}
+          />
           <Textarea value={text} onChange={setText} placeholder="글자수 제한 없음" />
         </div>
 
         <div>
           <Title3>여러 줄 Textarea</Title3>
-          <Textarea value={texts} onChange={setTexts} height="120px" placeholder="긴 내용을 입력하세요" />
+          <Textarea
+            value={texts}
+            onChange={setTexts}
+            height="120px"
+            placeholder="긴 내용을 입력하세요"
+          />
         </div>
 
         <div>
@@ -117,11 +152,16 @@ export default function SharedComponents() {
 
           {status !== 'default' && (
             <div className="mt-[4px]">
-              <p className={`ml-[2px] font-regular text-[12px] ${getMessageColor()}`}>{getMessage()}</p>
+              <p className={`ml-[2px] font-regular text-[12px] ${getMessageColor()}`}>
+                {getMessage()}
+              </p>
             </div>
           )}
 
-          <button onClick={handleCheck} className="mt-2 px-4 py-2 bg-blue-500 text-white-50 rounded">
+          <button
+            onClick={handleCheck}
+            className="mt-2 px-4 py-2 bg-blue-500 text-white-50 rounded"
+          >
             확인
           </button>
         </div>
@@ -129,7 +169,13 @@ export default function SharedComponents() {
 
       <section className="space-y-4 p-4 border rounded">
         <Title1>카드 컴포넌트</Title1>
-        <GroupCard title="우리끼리 골프" description="Welcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임" member={30} img="" onGroupCardClick={handleGroupCardClick} />
+        <GroupCard
+          title="우리끼리 골프"
+          description="Welcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임"
+          member={30}
+          img=""
+          onGroupCardClick={handleGroupCardClick}
+        />
         <div className="w-[25%] mb-2">
           <EventCard
             title="동산 사이드 프로젝트 쫑파티"

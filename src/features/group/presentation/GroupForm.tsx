@@ -61,7 +61,7 @@ export const GroupForm = () => {
                 </div>
                 <Input
                   value={name}
-                  onChange={setName}
+                  onChange={e => setName(e.target.value)}
                   placeholder="그룹명을 입력하세요."
                   maxLength={15}
                 />
