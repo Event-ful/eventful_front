@@ -6,6 +6,12 @@ import Clock from '@/assets/svg/clock.svg';
 import CheckCircleBlue from '@/assets/svg/check_circle_blue.svg';
 import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
 import { useNavigate } from 'react-router-dom';
+import {
+  useCheckNickname,
+  useSendEmailVerification,
+  useSignUp,
+  useVerifyEmailCode,
+} from '../data/hooks';
 
 /**
  * 회원가입 폼 데이터 타입
@@ -55,6 +61,11 @@ export default function SignUpForm() {
     },
   });
 
+  const { mutateAsync: checkNickname } = useCheckNickname();
+  const { mutateAsync: sendVerification } = useSendEmailVerification();
+  const { mutateAsync: verifyCode } = useVerifyEmailCode();
+  const { mutateAsync: signUp } = useSignUp();
+
   const nickname = watch('nickname');
   const email = watch('email');
   const verificationCode = watch('verificationCode');
@@ -92,9 +103,9 @@ export default function SignUpForm() {
    * 0이 되면 isTimerExpired를 true로 설정합니다.
    */
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: number;
     if (timer > 0) {
-      interval = setInterval(() => {
+      interval = window.setInterval(() => {
         setTimer(prev => {
           if (prev <= 1) {
             setIsTimerExpired(true);
@@ -127,9 +138,16 @@ export default function SignUpForm() {
    * }
    * ```
    */
-  const onSubmit = (data: SignUpFormData) => {
-    console.log('Form submitted:', data);
-    // TODO: API 호출 로직 추가
+  const onSubmit = async (data: SignUpFormData) => {
+    try {
+      const res = await signUp(data);
+      if (res.data === 'Success') {
+        navigate('/home');
+      }
+    } catch (err) {
+      const message = err.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
+      alert(message);
+    }
   };
 
   /**
@@ -143,17 +161,21 @@ export default function SignUpForm() {
    * @returns {Promise<void>}
    */
   const handleNicknameCheck = async () => {
-    // TODO: API 호출
+    try {
+      const res = await checkNickname({ nickname });
+      const result = res.data === 'Success';
 
-    const result = true; // 임시로 항상 true 반환
+      setIsNicknameChecked(true);
+      setIsNicknameAvailable(result);
 
-    setIsNicknameChecked(true);
-    setIsNicknameAvailable(result);
-
-    if (!result) {
-      setError('nickname', { message: '이미 사용 중인 닉네임 입니다.' });
-    } else {
-      clearErrors('nickname');
+      if (!result) {
+        setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
+      } else {
+        clearErrors('nickname');
+      }
+    } catch (err) {
+      const message = err.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
+      setError('nickname', { message });
     }
   };
 
@@ -168,11 +190,16 @@ export default function SignUpForm() {
    * @returns {Promise<void>}
    */
   const handleSendVerification = async () => {
-    // TODO: API 호출
-    setIsSent(true);
-    setTimer(10); // 10초 타이머 시작
-    setIsTimerExpired(false);
-    setIsVerified(false);
+    try {
+      await sendVerification({ email });
+      setIsSent(true);
+      setTimer(600);
+      setIsTimerExpired(false);
+      setIsVerified(false);
+    } catch (err) {
+      const message = err.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
+      setError('email', { message });
+    }
   };
 
   /**
@@ -185,11 +212,16 @@ export default function SignUpForm() {
    * @returns {Promise<void>}
    */
   const handleResendVerification = async () => {
-    // TODO: API 호출
-
-    setTimer(10); // 10초 타이머 재시작
-    setIsTimerExpired(false);
-    setIsVerified(false);
+    try {
+      await sendVerification({ email });
+      setTimer(600);
+      setIsTimerExpired(false);
+      setIsVerified(false);
+    } catch (err) {
+      const message =
+        err.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
+      setError('verificationCode', { message });
+    }
   };
 
   /**
@@ -207,16 +239,20 @@ export default function SignUpForm() {
       setError('verificationCode', { message: '인증 시간이 만료되었습니다.' });
       return;
     }
-    // TODO: API 호출
+    try {
+      const res = await verifyCode({ email, verificationCode });
+      const result = res.data === 'Success';
 
-    const isValid = verificationCode === '123456'; // 임시 인증번호
-
-    setIsVerified(isValid);
-    if (isValid) {
-      setTimer(0);
-      clearErrors('verificationCode');
-    } else {
-      setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
+      setIsVerified(result);
+      if (result) {
+        setTimer(0);
+        clearErrors('verificationCode');
+      } else {
+        setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
+      }
+    } catch (err) {
+      const message = err.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
+      setError('verificationCode', { message });
     }
   };
 
@@ -304,14 +340,26 @@ export default function SignUpForm() {
               <span className="text-red-200">*</span>
             </div>
             <div className="flex gap-2">
-              <Input
-                {...register('nickname', {
-                  required: '닉네임을 입력하세요',
-                })}
-                placeholder="닉네임을 입력하세요"
-                className="flex-1"
-                status={getInputStatus('nickname')}
-              />
+              <div className="relative flex-1">
+                <Input
+                  {...register('nickname', {
+                    required: '닉네임을 입력하세요',
+                  })}
+                  value={watch('nickname') || ''}
+                  placeholder="닉네임을 입력하세요"
+                  type="text"
+                  maxLength={10}
+                  status={getInputStatus('nickname')}
+                />
+                <div
+                  className={`absolute bottom-[4px] right-[6px] text-[12px] font-regular ${
+                    (watch('nickname')?.length || 0) > 10 ? 'text-red-200' : 'text-black-300'
+                  }`}
+                >
+                  {watch('nickname')?.length || 0} / 10
+                </div>
+              </div>
+
               {isNicknameChecked ? (
                 <div className="h-[39px] flex items-center justify-center px-2">
                   {isNicknameAvailable ? (
