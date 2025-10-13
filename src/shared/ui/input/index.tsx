@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type InputStatus = 'default' | 'success' | 'error';
 
 interface InputProps {
@@ -12,7 +10,7 @@ interface InputProps {
   maxLength?: number;
 }
 
-export const Input: React.FC<InputProps> = ({
+export default function Input  ({
   value,
   onChange,
   placeholder,
@@ -20,7 +18,7 @@ export const Input: React.FC<InputProps> = ({
   status = 'default',
   type = 'text',
   maxLength
-}) => {
+}) {
   const getStatusStyle = () => {
     switch (status) {
       case 'error':

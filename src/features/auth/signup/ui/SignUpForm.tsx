@@ -1,4 +1,3 @@
-import { Input } from '@/shared/ui/Input';
 import { Body4, Button2, Button3, Headline2, Title3 } from '@/shared/ui/Typography';
 import Clock from '@/assets/svg/clock.svg';
 import CheckCircleBlue from '@/assets/svg/check_circle_blue.svg';
@@ -7,7 +6,8 @@ import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
 import { useNickname } from '../model/useNickname';
 import { useEmail } from '../model/useEmail';
 import { usePassword } from '../model/usePassword';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
+import { Input } from '@/shared/ui/input/input';
 
 export default function SignUpForm() {
   const navigate = useNavigate();
