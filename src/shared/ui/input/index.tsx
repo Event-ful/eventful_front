@@ -10,15 +10,15 @@ interface InputProps {
   maxLength?: number;
 }
 
-export default function Input  ({
+export default function Input({
   value,
   onChange,
   placeholder,
   className = '',
   status = 'default',
   type = 'text',
-  maxLength
-}) {
+  maxLength,
+}: InputProps) {
   const getStatusStyle = () => {
     switch (status) {
       case 'error':
@@ -34,10 +34,10 @@ export default function Input  ({
     <input
       type={type}
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
       maxLength={maxLength}
       className={`w-full h-[39px] px-3 py-2 border rounded-md outline-none transition-colors ${getStatusStyle()} ${className}`}
     />
   );
-};
+}

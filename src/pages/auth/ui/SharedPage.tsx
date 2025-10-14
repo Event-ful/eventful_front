@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Textarea } from '@/shared/ui/textarea';
-import { Input } from '@/shared/ui/Input';
 import {
   Title1,
   Title2,
@@ -19,6 +18,7 @@ import {
 } from '@/shared/ui/Typography';
 import { GroupCard } from '@/widgets/groupCard';
 import { EventCard } from '@/widgets/eventCard';
+import Input from '@/shared/ui/input';
 
 export default function SharedComponents() {
   const [inputText, setInputText] = useState('');

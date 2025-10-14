@@ -26,6 +26,13 @@ export default function Sidebar() {
           <h2 className="font-semibold"> 회원가입</h2>
         </Link>
         <Link
+          to={'new_group'}
+          className={`block rounded-[8px] px-3 py-[10px] text-gray-600
+         ${isActive('new_group') ? 'bg-[#F1FDFA] text-gray-950' : 'hover:bg-[#F1FDFA]'}`}
+        >
+          <h2 className="font-semibold"> 그룹 만들기</h2>
+        </Link>
+        <Link
           to={'shared_components'}
           className={`block rounded-[8px] px-3 py-[10px] text-gray-600
          ${isActive('shared_components') ? 'bg-[#F1FDFA] text-gray-950' : 'hover:bg-[#F1FDFA]'}`}
