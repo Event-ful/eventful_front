@@ -6,8 +6,8 @@ import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
 import { useNickname } from '../model/useNickname';
 import { useEmail } from '../model/useEmail';
 import { usePassword } from '../model/usePassword';
-import { useNavigate } from 'react-router-dom'; 
-import { Input } from '@/shared/ui/input/input';
+import { useNavigate } from 'react-router-dom';
+import Input from '@/shared/ui/input';
 
 export default function SignUpForm() {
   const navigate = useNavigate();
