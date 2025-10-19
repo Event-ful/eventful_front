@@ -3,7 +3,7 @@ import ShareBlack from '@/assets/svg/share_black.svg';
 import EventBlack from '@/assets/svg/event_black.svg';
 import VoteBlack from '@/assets/svg/vote_black.svg';
 import WonBlack from '@/assets/svg/won_black.svg';
-import { GuideCardProps } from '../ui/guideCard';
+import { GuideCardProps } from '../../../../widgets/home/guideCard';
 
 const guideCardsData: GuideCardProps[] = [
   {

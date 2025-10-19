@@ -2,11 +2,10 @@ import { Body4, Button2, Button3, Headline2, Title3 } from '@/shared/ui/Typograp
 import Clock from '@/assets/svg/clock.svg';
 import CheckCircleBlue from '@/assets/svg/check_circle_blue.svg';
 import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
-
 import { useNickname } from '../model/useNickname';
 import { useEmail } from '../model/useEmail';
 import { usePassword } from '../model/usePassword';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';   
 import Input from '@/shared/ui/input';
 
 export default function SignUpForm() {
@@ -90,7 +89,7 @@ export default function SignUpForm() {
                 onChange={handleNicknameChange}
                 placeholder="닉네임을 입력하세요"
                 className="flex-1"
-                status={nicknameStatus}
+                status={nicknameStatus} 
               />
               {/* 닉네임 중복검사 결과에 따른 버튼/아이콘 표시 */}
               {isChecked ? (

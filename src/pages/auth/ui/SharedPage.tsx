@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Textarea } from '@/shared/ui/textarea';
+import { Textarea } from '@/shared/ui/textarea'; 
 import {
   Title1,
   Title2,

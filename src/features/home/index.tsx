@@ -1,6 +1,6 @@
-import { guideCardsData } from './data/guideData';
-import GuideCard from './ui/guideCard';
-import HomeBanner from './ui/homeBanner';
+import { guideCardsData } from './fetchHome/api/guideData';
+import GuideCard from '../../widgets/home/guideCard';
+import HomeBanner from '../../widgets/home/homeBanner';
 
 export default function HomeForm() {
   return (
