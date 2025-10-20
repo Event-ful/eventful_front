@@ -1,71 +1,47 @@
-import { Body4, Button2, Button3, Headline2, Title3 } from '@/shared/ui/Typography';
+import { Input } from '@/shared/ui/input';
+import { Body4, Button2, Button3, Headline2, Title3 } from '@/shared/ui/typography';
 import Clock from '@/assets/svg/clock.svg';
 import CheckCircleBlue from '@/assets/svg/check_circle_blue.svg';
 import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
-import { useNickname } from '../model/useNickname';
-import { useEmail } from '../model/useEmail';
-import { usePassword } from '../model/usePassword';
-import { useNavigate } from 'react-router-dom';   
-import Input from '@/shared/ui/input';
+import { useSignUpForm } from '../model/useSignUpForm';
+import { getMessageColor, formatTime } from '../model/utils';
+import { useNavigate } from 'react-router-dom';
 
+/**
+ * 회원가입 폼 컴포넌트
+ *
+ * @description
+ * SignUpForm UI 컴포넌트입니다.
+ * 상태 관리, API 호출, 유효성 검증 등은 useSignUpForm 훅에서 처리됩니다.
+ *
+ * @returns {JSX.Element} 회원가입 폼 UI
+ */
 export default function SignUpForm() {
   const navigate = useNavigate();
 
   const {
-    nickname,
-    status: nicknameStatus,
-    isChecked,
-    isButtonDisabled,
-    handleChange: handleNicknameChange,
-    checkAvailability,
-    getMessage: getNicknameMessage,
-  } = useNickname();
-
-  const {
-    email,
-    status: emailStatus,
+    register,
+    handleSubmit,
+    watch,
+    errors,
+    getInputStatus,
+    isFormComplete,
+    isNicknameChecked,
+    isNicknameAvailable,
     isSent,
     isVerified,
-    verificationCode,
-    verificationStatus,
     timer,
     isTimerExpired,
-    handleEmailChange,
+    handleNicknameCheck,
     handleSendVerification,
     handleResendVerification,
-    handleVerificationCodeChange,
     handleVerifyCode,
-    getEmailMessage,
-    getVerificationMessage,
-    formatTime,
-  } = useEmail();
+    onSubmit,
+  } = useSignUpForm();
 
-  const {
-    password,
-    passwordStatus,
-    passwordConfirm,
-    passwordConfirmStatus,
-    handlePasswordChange,
-    handlePasswordConfirmChange,
-    getPasswordMessage,
-    getPasswordConfirmMessage,
-  } = usePassword();
-
-  /** 전체 폼 유효성 검사 */
-  const isFormValid = () =>
-    nicknameStatus === 'success' &&
-    isChecked &&
-    emailStatus === 'success' &&
-    isVerified &&
-    passwordStatus === 'success' &&
-    passwordConfirmStatus === 'success';
-
-  /** 메시지 색상 */
-  const getMessageColor = (status: 'default' | 'success' | 'error') => {
-    if (status === 'error') return 'text-red-200';
-    if (status === 'success') return 'text-blue-300';
-    return 'text-black-300';
-  };
+  const nickname = watch('nickname');
+  const email = watch('email');
+  const verificationCode = watch('verificationCode');
 
   const handleGoHome = () => {
     navigate('/home');
@@ -76,7 +52,7 @@ export default function SignUpForm() {
       <div className="w-full max-w-md bg-white-50 p-8 rounded-xl border-[1px] border-black-200">
         <Headline2 className="text-black-400 text-center mb-8">회원가입</Headline2>
 
-        <div className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* 닉네임 */}
           <div>
             <div className="flex items-center gap-1 mb-2">
@@ -84,17 +60,27 @@ export default function SignUpForm() {
               <span className="text-red-200">*</span>
             </div>
             <div className="flex gap-2">
-              <Input
-                value={nickname}
-                onChange={handleNicknameChange}
-                placeholder="닉네임을 입력하세요"
-                className="flex-1"
-                status={nicknameStatus} 
-              />
-              {/* 닉네임 중복검사 결과에 따른 버튼/아이콘 표시 */}
-              {isChecked ? (
+              <div className="relative flex-1">
+                <Input
+                  {...register('nickname', { required: '닉네임을 입력하세요' })}
+                  value={nickname || ''}
+                  placeholder="닉네임을 입력하세요"
+                  type="text"
+                  maxLength={10}
+                  status={getInputStatus('nickname')}
+                />
+                <div
+                  className={`absolute bottom-[4px] right-[6px] text-[12px] font-regular ${
+                    (nickname?.length || 0) > 10 ? 'text-red-200' : 'text-black-300'
+                  }`}
+                >
+                  {nickname?.length || 0} / 10
+                </div>
+              </div>
+
+              {isNicknameChecked ? (
                 <div className="h-[39px] flex items-center justify-center px-2">
-                  {nicknameStatus === 'success' ? (
+                  {isNicknameAvailable ? (
                     <img src={CheckCircleBlue} alt="사용 가능한 닉네임" className="w-6 h-6" />
                   ) : (
                     <img src={CloseCircleRed} alt="사용 불가능한 닉네임" className="w-6 h-6" />
@@ -103,19 +89,32 @@ export default function SignUpForm() {
               ) : (
                 <button
                   type="button"
-                  onClick={checkAvailability}
-                  disabled={isButtonDisabled}
-                  className={`h-[39px] px-4 rounded whitespace-nowrap ${isButtonDisabled ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'}`}
+                  onClick={handleNicknameCheck}
+                  disabled={!nickname?.trim()}
+                  className={`h-[39px] px-4 rounded whitespace-nowrap ${
+                    !nickname?.trim()
+                      ? 'bg-black-300 text-white-50 cursor-not-allowed'
+                      : 'bg-green-400 text-white-50 hover:bg-green-500'
+                  }`}
                 >
                   <Button3>중복검사</Button3>
                 </button>
               )}
             </div>
-            {/* 닉네임 중복검사 결과에 따른 메세지 표시 */}
-            {isChecked && nicknameStatus !== 'default' && (
+
+            {isNicknameChecked && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(nicknameStatus)}`}>
-                  {getNicknameMessage()}
+                <Body4 className={`ml-[2px] ${getMessageColor(getInputStatus('nickname'))}`}>
+                  {isNicknameAvailable
+                    ? '사용 가능한 닉네임 입니다.'
+                    : '이미 사용 중인 닉네임 입니다.'}
+                </Body4>
+              </div>
+            )}
+            {errors.nickname && !isNicknameChecked && (
+              <div className="mt-[4px]">
+                <Body4 className={`ml-[2px] ${getMessageColor('error')}`}>
+                  {errors.nickname.message}
                 </Body4>
               </div>
             )}
@@ -129,18 +128,27 @@ export default function SignUpForm() {
             </div>
             <div className="flex gap-2 mb-2">
               <Input
-                value={email}
-                onChange={handleEmailChange}
+                {...register('email', {
+                  required: '이메일을 입력하세요',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.(com|net|org|kr|co\.kr)$/i,
+                    message: '올바른 이메일을 입력해주세요',
+                  },
+                })}
                 placeholder="이메일을 입력하세요"
                 className="flex-1"
-                status={emailStatus}
+                status={getInputStatus('email')}
               />
               {!isSent ? (
                 <button
                   type="button"
                   onClick={handleSendVerification}
-                  disabled={emailStatus !== 'success'}
-                  className={`h-[39px] px-3 rounded whitespace-nowrap ${emailStatus !== 'success' ? 'bg-black-300 text-white-50 cursor-not-allowed' : 'bg-green-400 text-white-50 hover:bg-green-500'}`}
+                  disabled={!!errors.email || !email}
+                  className={`h-[39px] px-3 rounded whitespace-nowrap ${
+                    !!errors.email || !email
+                      ? 'bg-black-300 text-white-50 cursor-not-allowed'
+                      : 'bg-green-400 text-white-50 hover:bg-green-500'
+                  }`}
                 >
                   <Button3>인증 번호 전송</Button3>
                 </button>
@@ -148,9 +156,9 @@ export default function SignUpForm() {
                 <button
                   type="button"
                   onClick={handleResendVerification}
-                  disabled={emailStatus !== 'success' || (timer > 0 && !isTimerExpired)}
+                  disabled={!!errors.email || !email || (timer > 0 && !isTimerExpired)}
                   className={`h-[39px] px-3 rounded whitespace-nowrap ${
-                    emailStatus !== 'success' || (timer > 0 && !isTimerExpired)
+                    !!errors.email || !email || (timer > 0 && !isTimerExpired)
                       ? 'bg-black-300 text-white-50 cursor-not-allowed'
                       : 'bg-green-400 text-white-50 hover:bg-green-500'
                   }`}
@@ -159,11 +167,10 @@ export default function SignUpForm() {
                 </button>
               )}
             </div>
-            {/* 이메일 형식에 따른 메세지 표시 */}
-            {emailStatus === 'error' && (
+            {errors.email && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(emailStatus)}`}>
-                  {getEmailMessage()}
+                <Body4 className={`ml-[2px] ${getMessageColor('error')}`}>
+                  {errors.email.message}
                 </Body4>
               </div>
             )}
@@ -173,13 +180,11 @@ export default function SignUpForm() {
               <div className="mt-2">
                 <div className="flex gap-2">
                   <Input
-                    value={verificationCode}
-                    onChange={handleVerificationCodeChange}
+                    {...register('verificationCode')}
                     placeholder="인증번호를 입력하세요"
                     className="w-[250px]"
-                    status={verificationStatus}
+                    status={getInputStatus('verificationCode')}
                   />
-                  {/* 인증이 완료된 경우에만 체크 아이콘 표시, 그 외에는 인증하기 버튼 표시 */}
                   {isVerified ? (
                     <div className="h-[39px] flex items-center justify-center px-2">
                       <img src={CheckCircleBlue} alt="인증 완료" className="w-6 h-6" />
@@ -188,9 +193,9 @@ export default function SignUpForm() {
                     <button
                       type="button"
                       onClick={handleVerifyCode}
-                      disabled={verificationCode.length === 0}
+                      disabled={!verificationCode}
                       className={`h-[39px] px-4 rounded whitespace-nowrap ${
-                        verificationCode.length === 0
+                        !verificationCode
                           ? 'bg-black-300 text-white-50 cursor-not-allowed'
                           : 'bg-green-400 text-white-50 hover:bg-green-500'
                       }`}
@@ -199,17 +204,23 @@ export default function SignUpForm() {
                     </button>
                   )}
                   {!isVerified && (
-                    <div className="flex item-center m-auto w-[55px]">
+                    <div className="flex items-center m-auto w-[55px]">
                       <img src={Clock} alt="타이머 시계" className="w-4 h-4 mr-1" />
                       <Body4 className="text-black-300">{formatTime(timer)}</Body4>
                     </div>
                   )}
                 </div>
-                {/* 이메일 인증 번호 검증에 따른 메세지 표시 */}
-                {verificationStatus !== 'default' && (
+                {errors.verificationCode && (
                   <div className="mt-[4px]">
-                    <Body4 className={`ml-[2px] ${getMessageColor(verificationStatus)}`}>
-                      {getVerificationMessage()}
+                    <Body4 className={`ml-[2px] ${getMessageColor('error')}`}>
+                      {errors.verificationCode.message}
+                    </Body4>
+                  </div>
+                )}
+                {isVerified && (
+                  <div className="mt-[4px]">
+                    <Body4 className={`ml-[2px] ${getMessageColor('success')}`}>
+                      인증이 완료되었습니다.
                     </Body4>
                   </div>
                 )}
@@ -224,32 +235,45 @@ export default function SignUpForm() {
               <span className="text-red-200">*</span>
             </div>
             <Input
-              value={password}
-              onChange={handlePasswordChange}
+              {...register('password', {
+                required: '비밀번호를 입력하세요',
+                validate: value => {
+                  const hasLower = /[a-z]/.test(value);
+                  const hasNumber = /\d/.test(value);
+                  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                  const validLength = value.length >= 8;
+                  if (!(hasLower && hasNumber && hasSpecial && validLength)) {
+                    return '영문, 숫자, 특수문자(*, -, !, @, #, $, %, ^, &)를 포함해 8자리 이상 입력해주세요.';
+                  }
+                  return true;
+                },
+              })}
+              type="password"
               placeholder="비밀번호를 입력하세요"
-              status={passwordStatus}
+              status={getInputStatus('password')}
             />
-            {/* 비밀번호 유효성 검사에 따른 메세지 표시 */}
-            {passwordStatus === 'error' && (
+            {errors.password && (
               <div className="mt-[4px]">
-                <Body4 className={`ml-[2px] ${getMessageColor(passwordStatus)}`}>
-                  {getPasswordMessage()}
+                <Body4 className={`ml-[2px] ${getMessageColor('error')}`}>
+                  {errors.password.message}
                 </Body4>
               </div>
             )}
 
             <div className="mt-2">
               <Input
-                value={passwordConfirm}
-                onChange={handlePasswordConfirmChange}
+                {...register('passwordConfirm', {
+                  required: '비밀번호를 다시 입력하세요',
+                  validate: value => value === watch('password') || '비밀번호가 일치하지 않습니다.',
+                })}
+                type="password"
                 placeholder="비밀번호를 다시 한 번 입력하세요"
-                status={passwordConfirmStatus}
+                status={getInputStatus('passwordConfirm')}
               />
-              {/* 비밀번호 일치 확인 메세지 표시 */}
-              {passwordConfirmStatus === 'error' && (
+              {errors.passwordConfirm && (
                 <div className="mt-[4px]">
-                  <Body4 className={`ml-[2px] ${getMessageColor(passwordConfirmStatus)}`}>
-                    {getPasswordConfirmMessage()}
+                  <Body4 className={`ml-[2px] ${getMessageColor('error')}`}>
+                    {errors.passwordConfirm.message}
                   </Body4>
                 </div>
               )}
@@ -266,13 +290,17 @@ export default function SignUpForm() {
             </button>
             <button
               type="submit"
-              disabled={!isFormValid()}
-              className={`w-full p-3 rounded ${isFormValid() ? 'bg-green-400 text-white-50 hover:bg-green-500' : 'bg-black-300 text-white-50 cursor-not-allowed'}`}
+              disabled={!isFormComplete}
+              className={`w-full p-3 rounded ${
+                isFormComplete
+                  ? 'bg-green-400 text-white-50 hover:bg-green-500'
+                  : 'bg-black-300 text-white-50 cursor-not-allowed'
+              }`}
             >
               <Button2>회원가입</Button2>
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

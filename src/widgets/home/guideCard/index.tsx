@@ -1,4 +1,4 @@
-import { Body1, Body2, Body3, Headline1, Title1, Title3 } from '@/shared/ui/Typography';
+import { Body1, Body2, Body3, Headline1, Title1, Title3 } from '@/shared/ui/typography';
 
 interface FeatureItem {
   icon: React.ReactNode;

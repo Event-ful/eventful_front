@@ -1,4 +1,4 @@
-import { Title1, Title3 } from '@/shared/ui/Typography';
+import { Title1, Title3 } from '@/shared/ui/typography';
 
 export default function HomeBanner() {
   return (

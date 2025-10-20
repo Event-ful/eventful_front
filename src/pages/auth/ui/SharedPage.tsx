@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Textarea } from '@/shared/ui/textarea'; 
+import { Textarea } from '@/shared/ui/textarea';
 import {
   Title1,
   Title2,
@@ -15,10 +15,10 @@ import {
   Button1,
   Button2,
   Button3,
-} from '@/shared/ui/Typography';
-import { GroupCard } from '@/widgets/groupCard';
-import { EventCard } from '@/widgets/eventCard';
-import Input from '@/shared/ui/input';
+} from '@/shared/ui/typography';
+import { Input } from '@/shared/ui/input';
+import GroupCard from '@/widgets/group/groupCard';
+import EventCard from '@/widgets/event/eventCard';
 
 export default function SharedComponents() {
   const [inputText, setInputText] = useState('');
@@ -98,11 +98,15 @@ export default function SharedComponents() {
         <Title1>Input 컴포넌트</Title1>
         <Input
           value={inputText}
-          onChange={setInputText}
+          onChange={e => setInputText(e.target.value)}
           placeholder="input 샘플 메세지를 입력하세요"
           maxLength={5}
         />
-        <Input value={inputText} onChange={setInputText} placeholder="글자수 제한 없음" />
+        <Input
+          value={inputText}
+          onChange={e => setInputText(e.target.value)}
+          placeholder="글자수 제한 없음"
+        />
       </section>
 
       {/* Textarea  */}

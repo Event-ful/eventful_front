@@ -1,4 +1,4 @@
-import { Body2, Body4, Button2, Title2 } from '@/shared/ui/Typography';
+import { Body2, Body4, Button2, Title2 } from '@/shared/ui/typography';
 import Member from '@/assets/svg/member.svg';
 import RightArrow from '@/assets/svg/right-arrow.svg';
 import DefaultGroupImage from '@/assets/img/group.png';
