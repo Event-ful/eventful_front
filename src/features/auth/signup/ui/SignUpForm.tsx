@@ -1,43 +1,18 @@
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
 import { Input } from '@/shared/ui/input';
 import { Body4, Button2, Button3, Headline2, Title3 } from '@/shared/ui/typography';
 import Clock from '@/assets/svg/clock.svg';
 import CheckCircleBlue from '@/assets/svg/check_circle_blue.svg';
 import CloseCircleRed from '@/assets/svg/close_circle_red.svg';
+import { useSignUpForm } from '../model/useSignUpForm';
+import { getMessageColor, formatTime } from '../model/utils';
 import { useNavigate } from 'react-router-dom';
-import {
-  useCheckNickname,
-  useSendEmailVerification,
-  useSignUp,
-  useVerifyEmailCode,
-} from '../model/queries';
-import { formatTime, getMessageColor } from '../model/utils';
-
-/**
- * 회원가입 폼 데이터 타입
- */
-interface SignUpFormData {
-  nickname: string;
-  email: string;
-  verificationCode: string;
-  password: string;
-  passwordConfirm: string;
-}
 
 /**
  * 회원가입 폼 컴포넌트
  *
  * @description
- * React Hook Form을 사용한 회원가입 폼입니다.
- * 닉네임 중복 확인, 이메일 인증, 비밀번호 유효성 검사 기능을 포함합니다.
- *
- * @features
- * - 닉네임 중복 확인
- * - 이메일 인증번호 발송 및 확인 (10초 타이머)
- * - 비밀번호 유효성 검사 (영문, 숫자, 특수문자 포함 8자리 이상)
- * - 비밀번호 확인 일치 검사
- * - 실시간 입력 유효성 검증
+ * SignUpForm UI 컴포넌트입니다.
+ * 상태 관리, API 호출, 유효성 검증 등은 useSignUpForm 훅에서 처리됩니다.
  *
  * @returns {JSX.Element} 회원가입 폼 UI
  */
@@ -48,254 +23,25 @@ export default function SignUpForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid },
-    setError,
-    clearErrors,
-  } = useForm<SignUpFormData>({
-    mode: 'onChange',
-    defaultValues: {
-      nickname: '',
-      email: '',
-      verificationCode: '',
-      password: '',
-      passwordConfirm: '',
-    },
-  });
-
-  const { mutateAsync: checkNickname } = useCheckNickname();
-  const { mutateAsync: sendVerification } = useSendEmailVerification();
-  const { mutateAsync: verifyCode } = useVerifyEmailCode();
-  const { mutateAsync: signUp } = useSignUp();
+    errors,
+    getInputStatus,
+    isFormComplete,
+    isNicknameChecked,
+    isNicknameAvailable,
+    isSent,
+    isVerified,
+    timer,
+    isTimerExpired,
+    handleNicknameCheck,
+    handleSendVerification,
+    handleResendVerification,
+    handleVerifyCode,
+    onSubmit,
+  } = useSignUpForm();
 
   const nickname = watch('nickname');
   const email = watch('email');
   const verificationCode = watch('verificationCode');
-  const password = watch('password');
-
-  // 닉네임 중복 확인 상태
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
-
-  // 이메일 인증 상태
-  const [isSent, setIsSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [isTimerExpired, setIsTimerExpired] = useState(false);
-
-  /**
-   * 닉네임 변경 감지 및 중복검사 결과 초기화
-   *
-   * @description
-   * 닉네임 입력값이 변경될 때마다 실행되며,
-   * 이전에 수행한 중복검사 결과를 초기화합니다.
-   */
-  useEffect(() => {
-    if (isNicknameChecked) {
-      setIsNicknameChecked(false);
-      setIsNicknameAvailable(false);
-    }
-  }, [nickname]);
-
-  /**
-   * 타이머 카운트다운
-   *
-   * @description
-   * timer 값이 0보다 클 때 매초 1씩 감소시키며,
-   * 0이 되면 isTimerExpired를 true로 설정합니다.
-   */
-  useEffect(() => {
-    let interval: number;
-    if (timer > 0) {
-      interval = window.setInterval(() => {
-        setTimer(prev => {
-          if (prev <= 1) {
-            setIsTimerExpired(true);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timer]);
-
-  /**
-   * 폼 제출 핸들러
-   *
-   * @description
-   * 모든 유효성 검사를 통과한 후 폼이 제출될 때 실행됩니다.
-   *
-   * @param {SignUpFormData} data - 폼에 입력된 회원가입 데이터
-   *
-   * @example
-   * ```typescript
-   * // 제출 시 콘솔에 출력되는 데이터 형식
-   * {
-   *   nickname: "사용자123",
-   *   email: "user@example.com",
-   *   verificationCode: "123456",
-   *   password: "Password123!",
-   *   passwordConfirm: "Password123!"
-   * }
-   * ```
-   */
-  const onSubmit = async (data: SignUpFormData) => {
-    try {
-      const res = await signUp(data);
-      if (res.data === 'Success') {
-        navigate('/home');
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
-      alert(message);
-    }
-  };
-
-  /**
-   * 닉네임 중복 확인 버튼 클릭 핸들러
-   *
-   * @description
-   * 사용자가 입력한 닉네임의 중복 여부를 확인합니다.
-   * 중복이면 에러 메시지를 설정하고, 사용 가능하면 에러를 제거합니다.
-   *
-   * @async
-   * @returns {Promise<void>}
-   */
-  const handleNicknameCheck = async () => {
-    try {
-      const res = await checkNickname({ nickname });
-      const result = res.data === 'Success';
-
-      setIsNicknameChecked(true);
-      setIsNicknameAvailable(result);
-
-      if (!result) {
-        setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
-      } else {
-        clearErrors('nickname');
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
-      setError('nickname', { message });
-    }
-  };
-
-  /**
-   * 이메일 인증번호 전송 버튼 클릭 핸들러
-   *
-   * @description
-   * 사용자가 입력한 이메일로 인증번호를 전송하고,
-   * 10초 타이머를 시작합니다.
-   *
-   * @async
-   * @returns {Promise<void>}
-   */
-  const handleSendVerification = async () => {
-    try {
-      await sendVerification({ email });
-      setIsSent(true);
-      setTimer(600);
-      setIsTimerExpired(false);
-      setIsVerified(false);
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
-      setError('email', { message });
-    }
-  };
-
-  /**
-   * 이메일 인증번호 재전송 버튼 클릭 핸들러
-   *
-   * @description
-   * 타이머를 초기화하고 새로운 인증번호를 전송합니다.
-   *
-   * @async
-   * @returns {Promise<void>}
-   */
-  const handleResendVerification = async () => {
-    try {
-      await sendVerification({ email });
-      setTimer(600);
-      setIsTimerExpired(false);
-      setIsVerified(false);
-    } catch (err) {
-      const message =
-        err.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
-      setError('verificationCode', { message });
-    }
-  };
-
-  /**
-   * 인증번호 확인 버튼 클릭 핸들러
-   *
-   * @description
-   * 사용자가 입력한 인증번호가 올바른지 확인합니다.
-   * 타이머가 만료되었거나 인증번호가 틀리면 에러 메시지를 설정합니다.
-   *
-   * @async
-   * @returns {Promise<void>}
-   */
-  const handleVerifyCode = async () => {
-    if (isTimerExpired) {
-      setError('verificationCode', { message: '인증 시간이 만료되었습니다.' });
-      return;
-    }
-    try {
-      const res = await verifyCode({ email, verificationCode });
-      const result = res.data === 'Success';
-
-      setIsVerified(result);
-      if (result) {
-        setTimer(0);
-        clearErrors('verificationCode');
-      } else {
-        setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
-      setError('verificationCode', { message });
-    }
-  };
-
-  /**
-   * 입력 필드의 상태를 반환하는 함수
-   *
-   * @description
-   * 각 입력 필드의 현재 상태(default, success, error)를 결정합니다.
-   * 에러가 있으면 'error', 값이 없으면 'default',
-   * 유효성 검사를 통과하면 'success'를 반환합니다.
-   *
-   * @param {keyof SignUpFormData} fieldName - 상태를 확인할 필드명
-   * @returns {'default' | 'success' | 'error'} 입력 필드의 현재 상태
-   */
-  const getInputStatus = (fieldName: keyof SignUpFormData): 'default' | 'success' | 'error' => {
-    if (errors[fieldName]) return 'error';
-    const value = watch(fieldName);
-    if (!value) return 'default';
-
-    if (fieldName === 'nickname' && isNicknameChecked) {
-      return isNicknameAvailable ? 'success' : 'error';
-    }
-    if (fieldName === 'email' && !errors.email && email) {
-      return 'success';
-    }
-    if (fieldName === 'verificationCode' && isVerified) {
-      return 'success';
-    }
-    if (fieldName === 'password' && !errors.password && password) {
-      return 'success';
-    }
-    if (fieldName === 'passwordConfirm' && !errors.passwordConfirm && watch('passwordConfirm')) {
-      return 'success';
-    }
-
-    return 'default';
-  };
-
-  /**
-   * 폼 전체의 유효성 검사 완료 여부
-   */
-  const isFormComplete = isValid && isNicknameChecked && isNicknameAvailable && isVerified;
 
   const handleGoHome = () => {
     navigate('/home');
@@ -316,10 +62,8 @@ export default function SignUpForm() {
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Input
-                  {...register('nickname', {
-                    required: '닉네임을 입력하세요',
-                  })}
-                  value={watch('nickname') || ''}
+                  {...register('nickname', { required: '닉네임을 입력하세요' })}
+                  value={nickname || ''}
                   placeholder="닉네임을 입력하세요"
                   type="text"
                   maxLength={10}
@@ -327,10 +71,10 @@ export default function SignUpForm() {
                 />
                 <div
                   className={`absolute bottom-[4px] right-[6px] text-[12px] font-regular ${
-                    (watch('nickname')?.length || 0) > 10 ? 'text-red-200' : 'text-black-300'
+                    (nickname?.length || 0) > 10 ? 'text-red-200' : 'text-black-300'
                   }`}
                 >
-                  {watch('nickname')?.length || 0} / 10
+                  {nickname?.length || 0} / 10
                 </div>
               </div>
 
@@ -346,9 +90,9 @@ export default function SignUpForm() {
                 <button
                   type="button"
                   onClick={handleNicknameCheck}
-                  disabled={!nickname.trim()}
+                  disabled={!nickname?.trim()}
                   className={`h-[39px] px-4 rounded whitespace-nowrap ${
-                    !nickname.trim()
+                    !nickname?.trim()
                       ? 'bg-black-300 text-white-50 cursor-not-allowed'
                       : 'bg-green-400 text-white-50 hover:bg-green-500'
                   }`}
@@ -357,6 +101,7 @@ export default function SignUpForm() {
                 </button>
               )}
             </div>
+
             {isNicknameChecked && (
               <div className="mt-[4px]">
                 <Body4 className={`ml-[2px] ${getMessageColor(getInputStatus('nickname'))}`}>
@@ -459,7 +204,7 @@ export default function SignUpForm() {
                     </button>
                   )}
                   {!isVerified && (
-                    <div className="flex item-center m-auto w-[55px]">
+                    <div className="flex items-center m-auto w-[55px]">
                       <img src={Clock} alt="타이머 시계" className="w-4 h-4 mr-1" />
                       <Body4 className="text-black-300">{formatTime(timer)}</Body4>
                     </div>
@@ -497,7 +242,6 @@ export default function SignUpForm() {
                   const hasNumber = /\d/.test(value);
                   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
                   const validLength = value.length >= 8;
-
                   if (!(hasLower && hasNumber && hasSpecial && validLength)) {
                     return '영문, 숫자, 특수문자(*, -, !, @, #, $, %, ^, &)를 포함해 8자리 이상 입력해주세요.';
                   }
@@ -520,7 +264,7 @@ export default function SignUpForm() {
               <Input
                 {...register('passwordConfirm', {
                   required: '비밀번호를 다시 입력하세요',
-                  validate: value => value === password || '비밀번호가 일치하지 않습니다.',
+                  validate: value => value === watch('password') || '비밀번호가 일치하지 않습니다.',
                 })}
                 type="password"
                 placeholder="비밀번호를 다시 한 번 입력하세요"
