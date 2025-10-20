@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Textarea } from '@/shared/ui/textarea';
-import { Input } from '@/shared/ui/input';
 import {
   Title1,
   Title2,
@@ -11,15 +10,15 @@ import {
   Body1,
   Body2,
   Body4,
-  Body5,
   Body4Emphasized,
   Body3Underlined,
   Button1,
   Button2,
   Button3,
-} from '@/shared/ui/typography';
-import { GroupCard } from '@/shared/ui/card/GroupCard';
-import { EventCard } from '@/shared/ui/card/EventCard';
+} from '@/shared/ui/Typography';
+import { Input } from '@/shared/ui/input';
+import GroupCard from '@/widgets/group/groupCard';
+import EventCard from '@/widgets/event/eventCard';
 
 export default function SharedComponents() {
   const [inputText, setInputText] = useState('');
@@ -85,7 +84,6 @@ export default function SharedComponents() {
           <Body1>Body1</Body1>
           <Body2>Body2</Body2>
           <Body4>Body4</Body4>
-          <Body5>Body5</Body5>
           <Body4Emphasized>Body4Emphasized</Body4Emphasized>
           <Body3Underlined>Body3Underlined</Body3Underlined>
 

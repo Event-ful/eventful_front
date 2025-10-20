@@ -1,10 +1,10 @@
-import { Button1, Headline2, Title1 } from '@/shared/ui/typography';
-import { Input } from '@/shared/ui/input';
 import { useState, useRef } from 'react';
 import { Textarea } from '@/shared/ui/textarea';
-import { GroupCard } from '@/shared/ui/card/GroupCard';
 import CameraIcon from '@/assets/svg/camera.svg';
 import X from '@/assets/svg/X.svg';
+import { Button1, Headline2, Title1 } from '@/shared/ui/Typography';
+import Input from '@/shared/ui/input';
+import { GroupCard } from '@/widgets/groupCard';
 
 export const GroupForm = () => {
   const [name, setName] = useState('');

@@ -11,7 +11,9 @@ export default function Layout({ isSidebar }: LayoutProps) {
       <div className="flex justify-between h-[50px] border-b border-gray-300 px-6">
         <EventFulLogo />
         <div className="y-center space-x-3">
-          <span className="text-sm font-medium bg-[#009689] text-white px-4 py-1 rounded-[8px]">낙현</span>
+          <span className="text-sm font-medium bg-[#009689] text-white px-4 py-1 rounded-[8px]">
+            낙현
+          </span>
         </div>
       </div>
 
@@ -22,7 +24,7 @@ export default function Layout({ isSidebar }: LayoutProps) {
           </div>
         )}
 
-        <div className="content flex-1 h-[calc(100vh-50px)]">
+        <div className="content flex-1 h-[calc(100vh-50px)] overflow-auto">
           <Outlet />
         </div>
       </div>

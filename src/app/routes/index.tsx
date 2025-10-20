@@ -1,7 +1,6 @@
-import SignUp from '@/pages/signUp.page';
-import Home from '../pages/home.page';
+import { SharedPage, SignupPage } from '@/pages/auth';
+import { HomePage } from '@/pages/home';
 import Layout from './layout';
-import SharedComponents from '../pages/shared.page';
 import NewGroup from '@/pages/newGroup.page';
 
 export const routes = [
@@ -10,11 +9,11 @@ export const routes = [
     path: '/',
     children: [
       {
-        element: <Home />,
+        element: <HomePage />,
         path: 'home',
       },
       {
-        element: <SharedComponents />,
+        element: <SharedPage />,
         path: 'shared_components',
       },
       {
@@ -28,7 +27,7 @@ export const routes = [
     path: '/',
     children: [
       {
-        element: <SignUp />,
+        element: <SignupPage />,
         path: 'sign_up',
       },
     ],

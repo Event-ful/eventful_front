@@ -24,6 +24,8 @@ export const Body1 = ({ children, className }: TypographyProps) => <p className=
 
 export const Body2 = ({ children, className }: TypographyProps) => <p className={`font-regular text-[14px] leading-[20px] ${className}`}>{children}</p>;
 
+export const Body3 = ({ children, className }: TypographyProps) => <p className={`font-regular text-[12px] leading-[auto] ${className}`}>{children}</p>;
+
 export const Body4 = ({ children, className }: TypographyProps) => <p className={`font-regular text-[12px] leading-[auto] ${className}`}>{children}</p>;
 
 export const Body5 = ({ children, className }: TypographyProps) => <p className={`font-light text-[10px] leading-[auto] ${className}`}>{children}</p>;
@@ -37,4 +39,4 @@ export const Button1 = ({ children, className }: TypographyProps) => <span class
 
 export const Button2 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[14px] leading-[21px] ${className}`}>{children}</span>;
 
-export const Button3 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[12px] leading-[auto] ${className}`}>{children}</span>;
+export const Button3 = ({ children, className }: TypographyProps) => <span className={`font-semibold text-[10px] leading-[auto] ${className}`}>{children}</span>;
