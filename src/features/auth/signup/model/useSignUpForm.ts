@@ -7,6 +7,7 @@ import {
   useSignUp,
   useVerifyEmailCode,
 } from './queries';
+import { ApiResponseError } from './type';
 
 /**
  * 회원가입 폼 데이터 타입
@@ -128,16 +129,19 @@ export function useSignUpForm() {
    * }
    * ```
    */
-  const onSubmit = async (data: SignUpFormData) => {
-    try {
-      const res = await signUp(data);
-      if (res.data === 'Success') {
-        navigate('/home');
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
-      alert(message);
-    }
+  const onSubmit = (data: SignUpFormData) => {
+    signUp(data, {
+      onSuccess: res => {
+        if (res.data === 'Success') {
+          navigate('/home');
+        }
+      },
+      onError: (err: unknown) => {
+        const error = err as { response?: { data?: ApiResponseError } };
+        const message = error.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
+        alert(message);
+      },
+    });
   };
 
   /**
@@ -150,22 +154,29 @@ export function useSignUpForm() {
    * @async
    * @returns {Promise<void>}
    */
-  const handleNicknameCheck = async () => {
-    try {
-      const res = await checkNickname({ nickname });
-      const result = res.data === 'Success';
-      setIsNicknameChecked(true);
-      setIsNicknameAvailable(result);
+  const handleNicknameCheck = () => {
+    checkNickname(
+      { nickname },
+      {
+        onSuccess: res => {
+          const result = res.data === 'Success';
+          setIsNicknameChecked(true);
+          setIsNicknameAvailable(result);
 
-      if (!result) {
-        setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
-      } else {
-        clearErrors('nickname');
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
-      setError('nickname', { message });
-    }
+          if (!result) {
+            setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
+          } else {
+            clearErrors('nickname');
+          }
+        },
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: ApiResponseError } };
+          const message =
+            error.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
+          setError('nickname', { message });
+        },
+      },
+    );
   };
 
   /**
@@ -178,17 +189,24 @@ export function useSignUpForm() {
    * @async
    * @returns {Promise<void>}
    */
-  const handleSendVerification = async () => {
-    try {
-      await sendVerification({ email });
-      setIsSent(true);
-      setTimer(600);
-      setIsTimerExpired(false);
-      setIsVerified(false);
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
-      setError('email', { message });
-    }
+  const handleSendVerification = () => {
+    sendVerification(
+      { email },
+      {
+        onSuccess: () => {
+          setIsSent(true);
+          setTimer(600);
+          setIsTimerExpired(false);
+          setIsVerified(false);
+        },
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: ApiResponseError } };
+          const message =
+            error.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
+          setError('email', { message });
+        },
+      },
+    );
   };
 
   /**
@@ -200,17 +218,23 @@ export function useSignUpForm() {
    * @async
    * @returns {Promise<void>}
    */
-  const handleResendVerification = async () => {
-    try {
-      await sendVerification({ email });
-      setTimer(600);
-      setIsTimerExpired(false);
-      setIsVerified(false);
-    } catch (err) {
-      const message =
-        err.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
-      setError('verificationCode', { message });
-    }
+  const handleResendVerification = () => {
+    sendVerification(
+      { email },
+      {
+        onSuccess: () => {
+          setTimer(600);
+          setIsTimerExpired(false);
+          setIsVerified(false);
+        },
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: ApiResponseError } };
+          const message =
+            error.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
+          setError('verificationCode', { message });
+        },
+      },
+    );
   };
 
   /**
@@ -223,28 +247,33 @@ export function useSignUpForm() {
    * @async
    * @returns {Promise<void>}
    */
-  const handleVerifyCode = async () => {
+  const handleVerifyCode = () => {
     if (isTimerExpired) {
       setError('verificationCode', { message: '인증 시간이 만료되었습니다.' });
       return;
     }
-    try {
-      const res = await verifyCode({ email, verificationCode });
-      const result = res.data === 'Success';
 
-      setIsVerified(result);
-      if (result) {
-        setTimer(0);
-        clearErrors('verificationCode');
-      } else {
-        setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
-      }
-    } catch (err) {
-      const message = err.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
-      setError('verificationCode', { message });
-    }
+    verifyCode(
+      { email, verificationCode },
+      {
+        onSuccess: res => {
+          const result = res.data === 'Success';
+          setIsVerified(result);
+          if (result) {
+            setTimer(0);
+            clearErrors('verificationCode');
+          } else {
+            setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
+          }
+        },
+        onError: (err: unknown) => {
+          const error = err as { response?: { data?: ApiResponseError } };
+          const message = error.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
+          setError('verificationCode', { message });
+        },
+      },
+    );
   };
-
   /**
    * 입력 필드의 상태를 반환하는 함수
    *
