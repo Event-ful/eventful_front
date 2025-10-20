@@ -15,7 +15,7 @@ import {
   Button1,
   Button2,
   Button3,
-} from '@/shared/ui/Typography';
+} from '@/shared/ui/typography';
 import { Input } from '@/shared/ui/input';
 import GroupCard from '@/widgets/group/groupCard';
 import EventCard from '@/widgets/event/eventCard';

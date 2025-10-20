@@ -1,5 +1,5 @@
 import { instance } from '@/shared/api/instance';
-import { NicknameRequest, EmailRequest, VerifyCodeRequest, SignUpRequest } from '../domain/type';
+import { EmailRequest, NicknameRequest, SignUpRequest, VerifyCodeRequest } from '../model/type';
 
 // 닉네임 중복 검사
 export const checkNicknameApi = async (data: NicknameRequest) => {

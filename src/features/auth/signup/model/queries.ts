@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { checkNicknameApi, sendEmailVerificationApi, verifyEmailCodeApi, signUpApi } from './api';
-import { NicknameRequest, EmailRequest, VerifyCodeRequest, SignUpRequest } from '../domain/type';
+import { checkNicknameApi, sendEmailVerificationApi, verifyEmailCodeApi, signUpApi } from '../api';
+import { NicknameRequest, EmailRequest, VerifyCodeRequest, SignUpRequest } from './type';
 
 export const useCheckNickname = () =>
   useMutation({

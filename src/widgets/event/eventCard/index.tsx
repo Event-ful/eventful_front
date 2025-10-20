@@ -1,5 +1,5 @@
 import RightArrow from '@/assets/svg/right-arrow.svg';
-import { Body2, Button2, Title2 } from '@/shared/ui/Typography';
+import { Body2, Button2, Title2 } from '@/shared/ui/typography';
 
 interface EventCardProps {
   title: string;
