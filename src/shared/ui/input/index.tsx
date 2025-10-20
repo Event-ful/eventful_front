@@ -17,12 +17,25 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'height
  *
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, value, height, placeholder, status = 'default', type = 'text', ...rest }, ref) => {
+  (
+    {
+      className,
+      value,
+      height,
+      placeholder,
+      status = 'default',
+      type = 'text',
+      onFocus,
+      onBlur,
+      ...rest
+    },
+    ref,
+  ) => {
     /** 입력 필드의 포커스 상태 */
     const [isFocused, setIsFocused] = useState(false);
 
     /** 사용자가 텍스트를 입력했는지 여부 */
-    const isTyping = value ? String(value).length > 0 : false;
+    const isTyping = value ? String(value).trim().length > 0 : false;
 
     /**
      * 포커스 및 입력 상태에 따른 보더 색상을 반환
@@ -45,14 +58,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       return 'text-black-300';
     };
 
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsFocused(false);
+      onBlur?.(e);
+    };
+
     return (
       <div className={`w-full m-0 ${className ?? ''}`}>
         <div className="relative">
           <input
             ref={ref}
             value={value}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             placeholder={isFocused || isTyping ? '' : placeholder}
             type={type}
             style={{ height }}
