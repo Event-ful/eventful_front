@@ -57,7 +57,7 @@ export const Body4Emphasized = ({ children, className }: TypographyProps) => (
 );
 
 export const Body3Underlined = ({ children, className }: TypographyProps) => (
-  <p className={`font-light underline text-[10px] leading-[20px] ${className}`}>{children}</p>
+  <p className={`font-regular underline text-[12px] leading-[20px] ${className}`}>{children}</p>
 );
 
 // Button
