@@ -4,11 +4,12 @@ import { useLoginForm } from '../model/useLoginForm';
 
 interface LoginFormProps {
   onClose: () => void;
+  onLoginSuccess?: () => void;
 }
 
-export default function LoginForm({ onClose }: LoginFormProps) {
-  const { email, password, setEmail, setPassword, isDisabled, login, handleGoSignUp } =
-    useLoginForm(onClose);
+export default function LoginForm({ onClose, onLoginSuccess }: LoginFormProps) {
+  const { email, password, setEmail, setPassword, isDisabled, handleLogin, handleGoSignUp } =
+    useLoginForm(onClose, onLoginSuccess);
 
   return (
     <div
@@ -22,7 +23,7 @@ export default function LoginForm({ onClose }: LoginFormProps) {
         <Headline1 className="text-black-400 mb-[10px]">로그인</Headline1>
         <Body1 className="text-black-300 mb-[30px]">계정에 로그인하여 시작하세요</Body1>
 
-        <form className="flex flex-col gap-[14px] w-full" onSubmit={login}>
+        <form className="flex flex-col gap-[14px] w-full">
           <Input
             type="text"
             placeholder="이메일을 입력하세요"
@@ -39,7 +40,7 @@ export default function LoginForm({ onClose }: LoginFormProps) {
 
         <button
           type="submit"
-          onClick={login}
+          onClick={handleLogin}
           disabled={isDisabled}
           className={`w-full py-[10px] mt-[30px] mb-[26px] rounded-md text-white-50 transition
             ${isDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-green-400 hover:bg-green-500'}`}

@@ -5,7 +5,7 @@ import { useLogin } from './queries';
 /**
  * 로그인 폼의 상태와 이벤트 로직을 관리하는 커스텀 훅
  */
-export const useLoginForm = (onClose: () => void) => {
+export const useLoginForm = (onClose: () => void, onLoginSuccess?: () => void) => {
   const navigate = useNavigate();
   const loginMutation = useLogin();
 
@@ -15,7 +15,7 @@ export const useLoginForm = (onClose: () => void) => {
   /** 이메일과 비밀번호 입력 여부에 따라 로그인 버튼 비활성화 */
   const isDisabled = !email || !password;
 
-  const login = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (isDisabled) return;
 
@@ -24,6 +24,7 @@ export const useLoginForm = (onClose: () => void) => {
       {
         onSuccess: () => {
           onClose();
+          onLoginSuccess?.();
           navigate('/');
         },
         onError: err => {
@@ -46,7 +47,7 @@ export const useLoginForm = (onClose: () => void) => {
     setEmail,
     setPassword,
     isDisabled,
-    login,
+    handleLogin,
     handleGoSignUp,
   };
 };
