@@ -7,7 +7,7 @@ import {
   useSignUp,
   useVerifyEmailCode,
 } from './queries';
-import { ApiResponseError } from './type';
+import { ApiResponseError } from '@/shared/api/type';
 
 /**
  * 회원가입 폼 데이터 타입
@@ -40,7 +40,6 @@ export function useSignUpForm() {
     watch,
     formState: { errors, isValid },
     setError,
-    clearErrors,
   } = useForm<SignUpFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -131,14 +130,12 @@ export function useSignUpForm() {
    */
   const onSubmit = (data: SignUpFormData) => {
     signUp(data, {
-      onSuccess: res => {
-        if (res.data === 'Success') {
-          navigate('/home');
-        }
+      onSuccess: () => {
+        navigate('/home');
       },
       onError: (err: unknown) => {
         const error = err as { response?: { data?: ApiResponseError } };
-        const message = error.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
+        const message = error.response?.data?.error_message || '회원가입 중 오류가 발생했습니다.';
         alert(message);
       },
     });
@@ -158,21 +155,14 @@ export function useSignUpForm() {
     checkNickname(
       { nickname },
       {
-        onSuccess: res => {
-          const result = res.data === 'Success';
+        onSuccess: () => {
           setIsNicknameChecked(true);
-          setIsNicknameAvailable(result);
-
-          if (!result) {
-            setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
-          } else {
-            clearErrors('nickname');
-          }
+          setIsNicknameAvailable(true);
         },
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
+            error.response?.data?.error_message || '닉네임 확인 중 오류가 발생했습니다.';
           setError('nickname', { message });
         },
       },
@@ -202,7 +192,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
+            error.response?.data?.error_message || '이메일 확인 중 오류가 발생했습니다.';
           setError('email', { message });
         },
       },
@@ -230,7 +220,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
+            error.response?.data?.error_message || '이메일 인증번호 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
@@ -256,19 +246,13 @@ export function useSignUpForm() {
     verifyCode(
       { email, verificationCode },
       {
-        onSuccess: res => {
-          const result = res.data === 'Success';
-          setIsVerified(result);
-          if (result) {
-            setTimer(0);
-            clearErrors('verificationCode');
-          } else {
-            setError('verificationCode', { message: '인증번호가 올바르지 않습니다.' });
-          }
+        onSuccess: () => {
+          setIsVerified(true);
         },
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
-          const message = error.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
+          const message =
+            error.response?.data?.error_message || '인증 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
