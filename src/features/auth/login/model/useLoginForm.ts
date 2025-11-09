@@ -7,35 +7,33 @@ import { useLogin } from './queries';
  */
 export const useLoginForm = (onClose: () => void, onLoginSuccess?: () => void) => {
   const navigate = useNavigate();
-  const loginMutation = useLogin();
+  const { mutate: login, isPending: isLoginLoading } = useLogin();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  /** 이메일과 비밀번호 입력 여부에 따라 로그인 버튼 비활성화 */
-  const isDisabled = !email || !password;
+  const isDisabled = !email || !password || isLoginLoading;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (isDisabled) return;
 
-    loginMutation.mutate(
+    login(
       { email, password },
       {
         onSuccess: () => {
-          onClose();
           onLoginSuccess?.();
+          onClose();
           navigate('/');
         },
-        onError: err => {
+        onError: (err: Error) => {
           console.error(err);
-          alert('로그인 실패');
+          alert('로그인 실패: 이메일과 비밀번호를 확인해주세요.');
         },
       },
     );
   };
 
-  /** 회원가입 페이지로 이동 */
   const handleGoSignUp = () => {
     onClose();
     navigate('/sign_up');
@@ -47,6 +45,7 @@ export const useLoginForm = (onClose: () => void, onLoginSuccess?: () => void) =
     setEmail,
     setPassword,
     isDisabled,
+    isLoginLoading,
     handleLogin,
     handleGoSignUp,
   };

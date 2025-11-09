@@ -8,7 +8,7 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onClose, onLoginSuccess }: LoginFormProps) {
-  const { email, password, setEmail, setPassword, isDisabled, handleLogin, handleGoSignUp } =
+  const { email, password, setEmail, setPassword, isDisabled, isLoginLoading, handleLogin, handleGoSignUp } =
     useLoginForm(onClose, onLoginSuccess);
 
   return (
@@ -29,12 +29,14 @@ export default function LoginForm({ onClose, onLoginSuccess }: LoginFormProps) {
             placeholder="이메일을 입력하세요"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            disabled={isLoginLoading}
           />
           <Input
             type="password"
             placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            disabled={isLoginLoading}
           />
         </form>
 
@@ -45,10 +47,10 @@ export default function LoginForm({ onClose, onLoginSuccess }: LoginFormProps) {
           className={`w-full py-[10px] mt-[30px] mb-[26px] rounded-md text-white-50 transition
             ${isDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-green-400 hover:bg-green-500'}`}
         >
-          <Button2>로그인</Button2>
+          <Button2>{isLoginLoading ? '로그인 중...' : '로그인'}</Button2>
         </button>
 
-        <button onClick={handleGoSignUp}>
+        <button onClick={handleGoSignUp} disabled={isLoginLoading}>
           <Body3Underlined>회원가입</Body3Underlined>
         </button>
       </div>
