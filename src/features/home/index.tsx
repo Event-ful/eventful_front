@@ -58,12 +58,12 @@ const activeEventsData = [
 ];
 
 const endedEventsData = [
-  {
-    id: 1,
-    title: '동산 사이드 프로젝트 종파티',
-    description: '사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미? 같이 일정 잡아봐요~~',
-    groupName: '동산팀',
-  },
+  // {
+  //   id: 1,
+  //   title: '동산 사이드 프로젝트 종파티',
+  //   description: '사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미? 같이 일정 잡아봐요~~',
+  //   groupName: '동산팀',
+  // },
 ];
 
 export default function HomeForm() {
@@ -82,7 +82,7 @@ export default function HomeForm() {
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-white-50">
       {/* 상단 히어로 섹션 */}
       <HomeBanner />
 
