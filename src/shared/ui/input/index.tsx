@@ -32,7 +32,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     /** 입력 필드의 포커스 상태 */
-    const [isFocused, setIsFocused] = useState(false);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     /** 사용자가 텍스트를 입력했는지 여부 */
     const isTyping = value ? String(value).trim().length > 0 : false;

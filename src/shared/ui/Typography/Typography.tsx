@@ -24,7 +24,7 @@ export const Title4 = ({ children, className }: TypographyProps) => (
 
 // Headline
 export const Headline1 = ({ children, className }: TypographyProps) => (
-  <h1 className={`font-extrabold text-[24px] leading-[36px] ${className}`}>{children}</h1>
+  <h1 className={`font-bold text-[24px] leading-[36px] ${className}`}>{children}</h1>
 );
 
 export const Headline2 = ({ children, className }: TypographyProps) => (
@@ -33,7 +33,7 @@ export const Headline2 = ({ children, className }: TypographyProps) => (
 
 // Body
 export const Body1 = ({ children, className }: TypographyProps) => (
-  <p className={`font-bold text-[16px] leading-[20px] ${className}`}>{children}</p>
+  <p className={`font-semibold text-[16px] leading-[20px] ${className}`}>{children}</p>
 );
 
 export const Body2 = ({ children, className }: TypographyProps) => (
@@ -57,7 +57,7 @@ export const Body4Emphasized = ({ children, className }: TypographyProps) => (
 );
 
 export const Body3Underlined = ({ children, className }: TypographyProps) => (
-  <p className={`font-light underline text-[10px] leading-[20px] ${className}`}>{children}</p>
+  <p className={`font-regular underline text-[12px] leading-[20px] ${className}`}>{children}</p>
 );
 
 // Button

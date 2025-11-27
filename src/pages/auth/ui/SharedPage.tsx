@@ -21,14 +21,14 @@ import GroupCard from '@/widgets/group/groupCard';
 import EventCard from '@/widgets/event/eventCard';
 
 export default function SharedComponents() {
-  const [inputText, setInputText] = useState('');
-  const [text, setText] = useState('');
-  const [texts, setTexts] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [inputText, setInputText] = useState<string>('');
+  const [text, setText] = useState<string>('');
+  const [texts, setTexts] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
   /** 메시지 표시 상태 ('default': 기본, 'success': 성공, 'error': 오류) */
   const [status, setStatus] = useState<'success' | 'error' | 'default'>('default');
   /** 오류 또는 성공 메시지 내용 */
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleCheck = () => {
     if (nickname.trim() === '') {

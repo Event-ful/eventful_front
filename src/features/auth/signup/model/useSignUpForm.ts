@@ -62,14 +62,14 @@ export function useSignUpForm() {
   const password = watch('password');
 
   // 닉네임 상태
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState<boolean>(false);
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState<boolean>(false);
 
   // 이메일 인증 상태
-  const [isSent, setIsSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const [isTimerExpired, setIsTimerExpired] = useState(false);
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number>(0);
+  const [isTimerExpired, setIsTimerExpired] = useState<boolean>(false);
 
   /**
    * 닉네임 변경 감지 및 중복검사 결과 초기화
