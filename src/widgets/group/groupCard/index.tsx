@@ -19,7 +19,7 @@ export default function GroupCard({
   onGroupCardClick,
 }: GroupCardProps) {
   return (
-    <div className="bg-white-100 w-[260px] flex-shrink-0 rounded-xl shadow-md border border-black-200 p-[14px] flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+    <div className="bg-white-100 w-full flex-shrink-0 rounded-xl shadow-md border border-black-200 p-[14px] flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
       <div className="border w-full h-[150px] overflow-hidden flex-shrink-0">
         <img
           src={img || DefaultGroupImage}

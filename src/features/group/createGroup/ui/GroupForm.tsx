@@ -139,7 +139,7 @@ export const GroupForm = () => {
         </div>
 
         <div className="w-[2px] h-full bg-black-200"></div>
-        <div className="flex-end">
+        <div className="flex flex-col min-w-[260px]">
           <Title1 className="mb-4">미리보기</Title1>
           <GroupCard
             title={name || '그룹명을 입력하세요'}

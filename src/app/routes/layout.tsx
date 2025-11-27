@@ -1,5 +1,5 @@
 import EventFulLogo from '@/shared/ui/eventFulLogo';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './sidebar';
 import { Button2 } from '@/shared/ui/typography';
 import LoginForm from '@/features/auth/login/ui/LoginForm';
@@ -11,6 +11,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ isSidebar }: LayoutProps) {
+  const navigate = useNavigate();
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const { mutate: logout, isPending: isLogoutLoading } = useLogout();
@@ -38,7 +39,9 @@ export default function Layout({ isSidebar }: LayoutProps) {
   return (
     <div>
       <div className="flex justify-between h-[50px] border-b border-gray-300 px-6">
-        <EventFulLogo />
+        <div className="cursor-pointer" onClick={() => navigate('/home')}>
+          <EventFulLogo />
+        </div>
         <div className="y-center space-x-3">
           {isLoggedIn ? (
             <button
