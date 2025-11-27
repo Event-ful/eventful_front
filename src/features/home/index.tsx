@@ -2,6 +2,10 @@ import HomeBanner from '../../widgets/home/homeBanner';
 import GuideCard from '@/widgets/home/guideCard';
 import { guideCardsData } from './fetchHome/api/guideData';
 import HomeController from './fetchHome/ui/HomeController';
+import GroupCard from '@/widgets/group/groupCard';
+import EventCard from '@/widgets/event/eventCard';
+import EmptyState from '@/shared/ui/emptyState';
+import { Title1 } from '@/shared/ui/typography';
 
 const groupsData = [
   {
@@ -61,6 +65,14 @@ const endedEventsData = [
 ];
 
 export default function HomeForm() {
+  const handleGroupCardClick = (groupId: number) => {
+    console.log('그룹 카드 클릭:', groupId);
+  };
+
+  const handleEventCardClick = (eventId: number) => {
+    console.log('이벤트 카드 클릭:', eventId);
+  };
+
   if (groupsData.length === 0) {
     return (
       <div className="bg-white-50">
@@ -73,11 +85,79 @@ export default function HomeForm() {
   return (
     <div className="bg-white-50">
       <HomeBanner />
-      <HomeController
-        groupsData={groupsData}
-        activeEventsData={activeEventsData}
-        endedEventsData={endedEventsData}
-      />
+      <div className="pl-[43px] pr-[104px] py-[39px]">
+        <div className="flex gap-[48px]">
+          {/* 그룹 영역 */}
+          <div className="w-[820px] flex-shrink-0">
+            <HomeController />
+            <div className="flex flex-wrap gap-[20px]">
+              {groupsData.map(group => (
+                <div key={group.id} className="w-[260px]">
+                  <GroupCard
+                    title={group.title}
+                    description={group.description}
+                    member={group.member}
+                    img={group.img}
+                    onGroupCardClick={() => handleGroupCardClick(group.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 이벤트 영역 */}
+          <div className="w-[400px] flex-shrink-0">
+            <section className="mb-12">
+              <Title1 className="mb-6">내 이벤트</Title1>
+
+              {activeEventsData.length === 0 ? (
+                <EmptyState message="참여중인 이벤트가 없어요." />
+              ) : (
+                <div>
+                  {activeEventsData.map((event, index) => (
+                    <div key={event.id}>
+                      <EventCard
+                        title={event.title}
+                        description={event.description}
+                        groupName={event.groupName}
+                        dayCounts={event.dayCounts}
+                        onEventCardClick={() => handleEventCardClick(event.id)}
+                      />
+                      {index < activeEventsData.length - 1 && (
+                        <hr className="my-3 border-t border-black-200" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section>
+              <Title1 className="mb-6">종료된 이벤트</Title1>
+
+              {endedEventsData.length === 0 ? (
+                <EmptyState message="종료된 이벤트가 없어요." />
+              ) : (
+                <div>
+                  {endedEventsData.map((event, index) => (
+                    <div key={event.id}>
+                      <EventCard
+                        title={event.title}
+                        description={event.description}
+                        groupName={event.groupName}
+                        onEventCardClick={() => handleEventCardClick(event.id)}
+                      />
+                      {index < endedEventsData.length - 1 && (
+                        <hr className="my-3 border-t border-black-200" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
