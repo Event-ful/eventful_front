@@ -10,4 +10,15 @@ export default defineConfig({
     },
   },
   plugins: [react(), svgr()],
+  server: {
+    host: 'localhost',
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://168.107.3.210:8080',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 });
