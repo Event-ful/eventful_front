@@ -26,13 +26,6 @@ export default function Sidebar() {
           <h2 className="font-semibold"> 회원가입</h2>
         </Link>
         <Link
-          to={'new_group'}
-          className={`block rounded-[8px] px-3 py-[10px] text-gray-600
-         ${isActive('new_group') ? 'bg-[#F1FDFA] text-gray-950' : 'hover:bg-[#F1FDFA]'}`}
-        >
-          <h2 className="font-semibold"> 그룹 만들기</h2>
-        </Link>
-        <Link
           to={'shared_components'}
           className={`block rounded-[8px] px-3 py-[10px] text-gray-600
          ${isActive('shared_components') ? 'bg-[#F1FDFA] text-gray-950' : 'hover:bg-[#F1FDFA]'}`}
@@ -46,10 +39,16 @@ export default function Sidebar() {
           <div>
             <p className="text-xs text-gray-600 mb-1">Eventful 소개</p>
             <div className="y-center gap-1">
-              <Link to="/terms" className="block text-xs text-gray-600 hover:text-gray-800 hover:underline">
+              <Link
+                to="/terms"
+                className="block text-xs text-gray-600 hover:text-gray-800 hover:underline"
+              >
                 이용약관 ·
               </Link>
-              <Link to="/privacy" className="block text-xs text-gray-600 hover:text-gray-800 hover:underline">
+              <Link
+                to="/privacy"
+                className="block text-xs text-gray-600 hover:text-gray-800 hover:underline"
+              >
                 개인정보처리방침
               </Link>
             </div>
