@@ -9,8 +9,8 @@ export const useLoginForm = (onClose: () => void, onLoginSuccess?: () => void) =
   const navigate = useNavigate();
   const { mutate: login, isPending: isLoginLoading } = useLogin();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const isDisabled = !email || !password || isLoginLoading;
 

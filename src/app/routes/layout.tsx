@@ -11,8 +11,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ isSidebar }: LayoutProps) {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const { mutate: logout, isPending: isLogoutLoading } = useLogout();
 
   const handleLogout = () => {

@@ -7,8 +7,8 @@ import { Input } from '@/shared/ui/input';
 import GroupCard from '@/widgets/group/groupCard';
 
 export const GroupForm = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');

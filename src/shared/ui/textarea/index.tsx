@@ -32,7 +32,7 @@ export const Textarea = ({
   status,
 }: TextareaProps) => {
   /** 텍스트 영역의 포커스 상태 */
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
   /** 텍스트 영역 DOM 요소 참조 */
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
