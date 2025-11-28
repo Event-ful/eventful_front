@@ -131,11 +131,11 @@ export function useSignUpForm() {
   const onSubmit = (data: SignUpFormData) => {
     signUp(data, {
       onSuccess: () => {
-        navigate('/home');
+        navigate('/');
       },
       onError: (err: unknown) => {
         const error = err as { response?: { data?: ApiResponseError } };
-        const message = error.response?.data?.error_message || '회원가입 중 오류가 발생했습니다.';
+        const message = error.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
         alert(message);
       },
     });
@@ -162,7 +162,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.error_message || '닉네임 확인 중 오류가 발생했습니다.';
+            error.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
           setError('nickname', { message });
         },
       },
@@ -192,7 +192,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.error_message || '이메일 확인 중 오류가 발생했습니다.';
+            error.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
           setError('email', { message });
         },
       },
@@ -220,7 +220,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.error_message || '이메일 인증번호 확인 중 오류가 발생했습니다.';
+            error.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
@@ -251,8 +251,7 @@ export function useSignUpForm() {
         },
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
-          const message =
-            error.response?.data?.error_message || '인증 확인 중 오류가 발생했습니다.';
+          const message = error.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
