@@ -74,7 +74,7 @@ export default function Layout({ isSidebar }: LayoutProps) {
           </div>
         )}
 
-        <div className="content flex-1 h-[calc(100vh-50px)] overflow-auto">
+        <div className="content flex-1 h-[calc(100vh-50px)] overflow-x-hidden overflow-y-auto">
           <Outlet />
         </div>
       </div>

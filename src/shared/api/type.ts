@@ -10,9 +10,9 @@ export interface ApiResponseSuccess<T> {
  * API 응답 에러 타입
  */
 export interface ApiResponseError {
-  statusCode: number;
-  errorMessage: string;
-  divisionCode: string;
+  status_code: number;
+  error_message: string;
+  division_code: string;
 }
 
 export type ApiResponseFormat<T> = ApiResponseSuccess<T> | ApiResponseError;

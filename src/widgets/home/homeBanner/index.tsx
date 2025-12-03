@@ -2,7 +2,7 @@ import { Title1, Title3 } from '@/shared/ui/typography';
 
 export default function HomeBanner() {
   return (
-    <div className="relative bg-slate-800 overflow-hidden">
+    <div className="relative bg-slate-800 overflow-hidden w-full">
       {/* 배경 장식 원형 요소들 */}
       <div className="absolute z-9 top-0 right-80 w-40 h-40 bg-green-300 rounded-full translate-x-8"></div>
       <div className="absolute z-10 top-24 right-80 w-40 h-40 bg-teal-600 rounded-full"></div>

@@ -135,7 +135,7 @@ export function useSignUpForm() {
       },
       onError: (err: unknown) => {
         const error = err as { response?: { data?: ApiResponseError } };
-        const message = error.response?.data?.errorMessage || '회원가입 중 오류가 발생했습니다.';
+        const message = error.response?.data?.error_message || '회원가입 중 오류가 발생했습니다.';
         alert(message);
       },
     });
@@ -161,9 +161,16 @@ export function useSignUpForm() {
         },
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
-          const message =
-            error.response?.data?.errorMessage || '닉네임 확인 중 오류가 발생했습니다.';
-          setError('nickname', { message });
+          const errorData = error.response?.data;
+
+          // division code가 'check-nickname-1'이면 중복된 닉네임으로 처리
+          if (errorData?.division_code === 'check-nickname-1') {
+            setIsNicknameChecked(true);
+            setIsNicknameAvailable(false);
+          } else {
+            const message = errorData?.error_message || '닉네임 확인 중 오류가 발생했습니다.';
+            setError('nickname', { message });
+          }
         },
       },
     );
@@ -190,10 +197,16 @@ export function useSignUpForm() {
           setIsVerified(false);
         },
         onError: (err: unknown) => {
-          const error = err as { response?: { data?: ApiResponseError } };
-          const message =
-            error.response?.data?.errorMessage || '이메일 확인 중 오류가 발생했습니다.';
-          setError('email', { message });
+          const error = err as { response?: { data?: ApiResponseError; status?: number } };
+          const statusCode = error.response?.status || error.response?.data?.status_code;
+
+          if (statusCode === 400) {
+            setError('email', { message: '이미 등록된 이메일입니다.' });
+          } else {
+            const message =
+              error.response?.data?.error_message || '이메일 확인 중 오류가 발생했습니다.';
+            setError('email', { message });
+          }
         },
       },
     );
@@ -220,7 +233,7 @@ export function useSignUpForm() {
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
           const message =
-            error.response?.data?.errorMessage || '이메일 인증번호 확인 중 오류가 발생했습니다.';
+            error.response?.data?.error_message || '이메일 인증번호 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
@@ -251,7 +264,8 @@ export function useSignUpForm() {
         },
         onError: (err: unknown) => {
           const error = err as { response?: { data?: ApiResponseError } };
-          const message = error.response?.data?.errorMessage || '인증 확인 중 오류가 발생했습니다.';
+          const message =
+            error.response?.data?.error_message || '인증 확인 중 오류가 발생했습니다.';
           setError('verificationCode', { message });
         },
       },
