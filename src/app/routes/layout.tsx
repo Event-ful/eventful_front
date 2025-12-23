@@ -39,7 +39,7 @@ export default function Layout({ isSidebar }: LayoutProps) {
   return (
     <div>
       <div className="flex justify-between h-[50px] border-b border-gray-300 px-6">
-        <div className="cursor-pointer" onClick={() => navigate('/home')}>
+        <div className="cursor-pointer flex" onClick={() => navigate('/home')}>
           <EventFulLogo />
         </div>
         <div className="y-center space-x-3">

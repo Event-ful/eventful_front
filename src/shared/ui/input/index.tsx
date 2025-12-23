@@ -44,7 +44,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      */
     const getBorderColor = () => {
       if (status === 'error') return 'border-red-200';
-      if (isFocused || isTyping) return 'border-black-300';
+      if (isFocused) return 'border-black-300';
       return 'border-black-200';
     };
 

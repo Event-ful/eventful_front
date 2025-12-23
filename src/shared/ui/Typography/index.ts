@@ -15,4 +15,4 @@ export {
   Button1,
   Button2,
   Button3,
-} from './Typography';
+} from './Typography.js';
