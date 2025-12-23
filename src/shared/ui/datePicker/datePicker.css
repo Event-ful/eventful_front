@@ -1,0 +1,172 @@
+/* DatePicker 커스텀 스타일 */
+.custom-datepicker {
+  font-family: inherit;
+  min-width: 300px;
+}
+
+.custom-datepicker .rdp {
+  --rdp-accent-color: #14b8a6;
+  --rdp-background-color: #14b8a6;
+  margin: 0;
+}
+
+/* 달력 컨테이너 */
+.custom-datepicker .rdp-months {
+  justify-content: center;
+}
+
+.custom-datepicker .rdp-month {
+  margin: 0;
+  min-width: 280px;
+}
+
+/* 헤더 (월/년도 네비게이션) */
+.custom-datepicker .rdp-caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.custom-datepicker .rdp-caption_label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* 네비게이션 버튼 */
+.custom-datepicker .rdp-nav {
+  position: absolute;
+  top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.custom-datepicker .rdp-button_previous {
+  left: 16px;
+}
+
+.custom-datepicker .rdp-button_next {
+  right: 16px;
+}
+
+.custom-datepicker .rdp-nav_button {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  transition: all 0.2s;
+}
+
+.custom-datepicker .rdp-nav_button:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* 요일 헤더 */
+.custom-datepicker .rdp-head_row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.custom-datepicker .rdp-head_cell {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  padding: 8px 0;
+  text-align: center;
+  width: 36px;
+  flex: 1;
+}
+
+/* 날짜 테이블 */
+.custom-datepicker .rdp-tbody {
+  border: none;
+}
+
+.custom-datepicker .rdp-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 4px;
+}
+
+/* 날짜 셀 */
+.custom-datepicker .rdp-cell {
+  padding: 2px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-datepicker .rdp-day {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.custom-datepicker .rdp-day:hover:not(.rdp-day_selected) {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* 선택된 날짜 */
+.custom-datepicker .rdp-day_selected {
+  background-color: #14b8a6 !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.custom-datepicker .rdp-day_selected:hover {
+  background-color: #0d9488 !important;
+}
+
+/* 오늘 날짜 */
+.custom-datepicker .rdp-day_today:not(.rdp-day_selected) {
+  font-weight: 600;
+  color: #14b8a6;
+}
+
+/* 다른 달의 날짜 */
+.custom-datepicker .rdp-day_outside {
+  color: #d1d5db;
+}
+
+.custom-datepicker .rdp-day_outside:hover {
+  background-color: transparent;
+  color: #d1d5db;
+}
+
+/* 비활성화된 날짜 */
+.custom-datepicker .rdp-day_disabled {
+  color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.custom-datepicker .rdp-day_disabled:hover {
+  background-color: transparent;
+}
+
+/* 주말 스타일 제거 (모든 날짜를 동일하게) */
+.custom-datepicker .rdp-weeknumber,
+.custom-datepicker .rdp-day_range_start,
+.custom-datepicker .rdp-day_range_end,
+.custom-datepicker .rdp-day_range_middle {
+  background: none;
+}
