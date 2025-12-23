@@ -126,9 +126,10 @@ export const LocationSearch = ({
     onChange(locationData);
     setSuggestions([]);
     setIsOpen(false);
+    setIsFocused(false);
   };
 
-  const isTyping = searchTerm.trim().length > 0;
+  const isTyping = searchTerm.trim().length > 0 && isFocused;
 
   const getBorderColor = () => {
     if (isFocused || isTyping) return 'border-black-300';
