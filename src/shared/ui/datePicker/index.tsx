@@ -76,15 +76,28 @@ export const DatePicker = ({
 
       {isOpen && (
         <div className="absolute bg-white-50 top-full left-0 mt-2 z-50 bg-white rounded-lg shadow-lg border border-black-200">
+          <style>{`
+            .datepicker-red-nav .rdp-nav button {
+              color: #ef4444 !important;
+            }
+            .rdp-chevron {
+              fill: #00786F;
+            }
+            .rdp-day:hover {
+              background-color: #00D5BE;
+              border-radius: 6px;
+            }
+          `}</style>
           <DayPicker
             mode="single"
             selected={selectedDate}
             onSelect={handleSelect}
+            month={month}
+            onMonthChange={setMonth}
             locale={ko}
-            className="p-3"
+            className="p-3 datepicker-red-nav"
             modifiersClassNames={{
               selected: 'bg-teal-500 text-white rounded-md',
-              today: 'font-bold text-teal-500',
             }}
           />
         </div>
