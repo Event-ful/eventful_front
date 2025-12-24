@@ -87,7 +87,7 @@ export default function HomeForm() {
 
   if (groupsData.length === 0) {
     return (
-      <div className="bg-white-50">
+      <div className="bg-white-50 w-full">
         <HomeBanner />
         <GuideCard cards={guideCardsData} />
       </div>
@@ -95,7 +95,7 @@ export default function HomeForm() {
   }
 
   return (
-    <div className="bg-white-50">
+    <div className="bg-white-50 w-full">
       <HomeBanner />
       <div className="pl-[43px] pr-[104px] py-[39px]">
         <div className="flex gap-[48px]">

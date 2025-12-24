@@ -12,7 +12,8 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(
   config => {
-    if (config.data) {
+    // FormData는 변환하지 않음
+    if (config.data && !(config.data instanceof FormData)) {
       config.data = snakecaseKeys(config.data, { deep: true });
     }
     return config;

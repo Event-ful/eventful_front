@@ -1,51 +1,26 @@
-import { useState, useRef } from 'react';
 import { Textarea } from '@/shared/ui/textarea';
 import CameraIcon from '@/assets/svg/camera.svg';
 import X from '@/assets/svg/X.svg';
 import { Button1, Headline2, Title1 } from '@/shared/ui/typography';
 import { Input } from '@/shared/ui/input';
 import GroupCard from '@/widgets/group/groupCard';
+import { useGroupForm } from '../model/useGroupForm';
 
 export const GroupForm = () => {
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        if (e.target?.result) {
-          setImagePreview(e.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleImageAreaClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageRemove = () => {
-    setImageFile(null);
-    setImagePreview('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const submitGroup = () => {
-    console.log('그룹 만들기');
-  };
-
-  const isFormValid = name.trim().length > 0 && description.trim().length > 0;
+  const {
+    name,
+    description,
+    imagePreview,
+    fileInputRef,
+    isFormValid,
+    isSubmitting,
+    setName,
+    setDescription,
+    handleImageUpload,
+    handleImageAreaClick,
+    handleImageRemove,
+    submitGroup,
+  } = useGroupForm();
 
   return (
     <div className="bg-white-100 w-full h-full p-[24px]">
@@ -129,17 +104,17 @@ export const GroupForm = () => {
             <button
               type="submit"
               onClick={submitGroup}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isSubmitting}
               className={`px-[80px] py-[12px] rounded-md 
-                ${isFormValid ? 'bg-green-400 text-white-100 hover:bg-green-500' : 'bg-black-200 text-black-300 cursor-not-allowed'}`}
+                ${isFormValid && !isSubmitting ? 'bg-green-400 text-white-100 hover:bg-green-500' : 'bg-black-200 text-black-300 cursor-not-allowed'}`}
             >
-              <Button1>그룹 만들기</Button1>
+              <Button1>{isSubmitting ? '처리 중...' : '그룹 만들기'}</Button1>
             </button>
           </div>
         </div>
 
         <div className="w-[2px] h-full bg-black-200"></div>
-        <div className="flex flex-col min-w-[260px]">
+        <div className="flex flex-col w-[300px]">
           <Title1 className="mb-4">미리보기</Title1>
           <GroupCard
             title={name || '그룹명을 입력하세요'}
