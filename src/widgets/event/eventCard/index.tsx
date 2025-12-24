@@ -1,39 +1,57 @@
-import RightArrow from '@/assets/svg/right-arrow.svg';
-import { Body2, Button2, Title2 } from '@/shared/ui/typography';
+import LocationIcon from '@/assets/svg/location.svg';
+import TimeIcon from '@/assets/svg/time.svg';
+import { Body3, Title2, Title3 } from '@/shared/ui/typography';
 
 interface EventCardProps {
-  title: string;
-  description: string;
-  groupName?: string;
-  dayCounts?: number;
+  eventId: string;
+  eventName: string;
+  startTime: string;
+  location: string;
+  isParticipating: boolean;
   onEventCardClick?: () => void;
 }
 
+/**
+ * 이벤트 카드 컴포넌트, 이벤트 제목, 위치 정보, 시간 정보를 표시하는 컴포넌트
+ */
 export default function EventCard({
-  title,
-  description,
-  groupName,
-  dayCounts,
+  eventId: _eventId, // eslint-disable-line @typescript-eslint/no-unused-vars
+  eventName,
+  startTime,
+  location,
+  isParticipating,
   onEventCardClick,
 }: EventCardProps) {
   return (
-    <div>
-      {/* 그룹명 */}
-      {groupName && <Body2 className="mb-[10px] text-black-400">🔎 {groupName}</Body2>}
-      {/* 이벤트명, 임박일수 */}
-      <div className="y-center justify-between mb-[6px]">
-        <Title2 className="text-black-400">{title}</Title2>
-        {dayCounts && <Body2 className="text-green-400">D-{dayCounts}</Body2>}
+    <div
+      className="bg-white rounded-xl shadow-md border border-black-200 p-[15px] relative cursor-pointer"
+      onClick={onEventCardClick}
+    >
+      <div className="absolute top-4 right-4">
+        {isParticipating ? (
+          <div className="bg-yellow-100 border border-black-300 rounded-[12px] px-2 py-1">
+            <Body3 className="text-black-400">참여중</Body3>
+          </div>
+        ) : (
+          <div className="bg-green-100 border border-green-400 rounded-[12px] px-2 py-1">
+            <Body3 className="text-green-400">미참여</Body3>
+          </div>
+        )}
       </div>
-      {/* 설명 */}
-      {description && <Body2 className="mb-[9px] text-black-300">{description}</Body2>}
-      {/* 상세 페이지 이동 버튼 */}
-      <div
-        className="y-center justify-end gap-1 text-green-500 cursor-pointer"
-        onClick={onEventCardClick}
-      >
-        <Button2>이벤트 페이지로 이동</Button2>
-        <img src={RightArrow} alt="오른쪽 화살표" className="w-3 h-3" />
+
+      {/* 이벤트 제목 */}
+      <Title2 className="text-black mb-2 pr-20">{eventName}</Title2>
+
+      {/* 위치 정보 */}
+      <div className="flex items-center gap-2 mb-1">
+        <img src={LocationIcon} alt="위치" className="w-4 h-4 text-gray-400" />
+        <Title3 className="text-black-300">{location}</Title3>
+      </div>
+
+      {/* 시간 정보 */}
+      <div className="flex items-center gap-2">
+        <img src={TimeIcon} alt="시간" className="w-4 h-4 text-gray-400" />
+        <Title3 className="text-black-300">{startTime}</Title3>
       </div>
     </div>
   );
