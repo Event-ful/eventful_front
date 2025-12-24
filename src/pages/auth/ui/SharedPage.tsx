@@ -19,7 +19,7 @@ import {
 import { Input } from '@/shared/ui/input';
 import GroupCard from '@/widgets/group/groupCard';
 import EventCard from '@/widgets/event/eventCard';
-import EventListItem from '@/widgets/event/eventListItem';
+import DateIcon from '@/shared/ui/date';
 
 export default function SharedComponents() {
   const [inputText, setInputText] = useState<string>('');
@@ -230,18 +230,24 @@ export default function SharedComponents() {
         <Title1>날짜 + 이벤트 카드</Title1>
         <div className="space-y-3">
           {eventListData.map((event, index) => (
-            <EventListItem
-              key={event.eventId}
-              eventId={event.eventId}
-              date={event.date}
-              eventName={event.eventName}
-              startTime={event.startTime}
-              location={event.location}
-              isParticipating={event.isParticipating}
-              index={index}
-              isLast={index === eventListData.length - 1}
-              onEventCardClick={() => handleEventListItemClick(event.eventId)}
-            />
+            <div key={event.eventId} className="flex gap-3 items-start relative">
+              <div className="flex flex-col items-center relative pt-1">
+                <DateIcon date={event.date} index={index} />
+                {index < eventListData.length - 1 && (
+                  <div className="absolute top-[70px] left-1/2 transform -translate-x-1/2 w-[1px] h-[40px] bg-black-200"></div>
+                )}
+              </div>
+              <div className="flex-1">
+                <EventCard
+                  eventId={event.eventId}
+                  eventName={event.eventName}
+                  startTime={event.startTime}
+                  location={event.location}
+                  isParticipating={event.isParticipating}
+                  onEventCardClick={() => handleEventListItemClick(event.eventId)}
+                />
+              </div>
+            </div>
           ))}
         </div>
       </section>
