@@ -8,6 +8,7 @@ export default {
       },
       colors: {
         green: {
+          100: '#D3FCF4',
           200: '#F1FDFA',
           300: '#00D5BE',
           400: '#009689',

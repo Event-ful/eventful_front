@@ -44,7 +44,7 @@ export default function SignUpForm() {
   const verificationCode = watch('verificationCode');
 
   const handleGoHome = () => {
-    navigate('/home');
+    navigate('/');
   };
 
   return (

@@ -19,6 +19,7 @@ import {
 import { Input } from '@/shared/ui/input';
 import GroupCard from '@/widgets/group/groupCard';
 import EventCard from '@/widgets/event/eventCard';
+import DateIcon from '@/shared/ui/date';
 
 export default function SharedComponents() {
   const [inputText, setInputText] = useState<string>('');
@@ -67,6 +68,45 @@ export default function SharedComponents() {
   const handleEventCardClick = () => {
     console.log('이벤트 상세 페이지로 이동');
   };
+
+  const handleEventListItemClick = (eventId: string) => {
+    console.log('이벤트 리스트 아이템 클릭함, eventId:', eventId);
+  };
+
+  const eventListData = [
+    {
+      eventId: '1',
+      date: '2024-05-15',
+      eventName: '동산 사이드 프로젝트 쫑파티',
+      startTime: '오후 17:30',
+      location: '사당역 5번 출구 앞',
+      isParticipating: false,
+    },
+    {
+      eventId: '2',
+      date: '2024-05-16',
+      eventName: '개발팀 온라인 회의',
+      startTime: '오전 11:30',
+      location: '디스코드',
+      isParticipating: true,
+    },
+    {
+      eventId: '3',
+      date: '2024-05-20',
+      eventName: '팀 빌딩 활동',
+      startTime: '오후 14:00',
+      location: '강남역 근처',
+      isParticipating: false,
+    },
+    {
+      eventId: '4',
+      date: '2024-05-22',
+      eventName: '프로젝트 발표회',
+      startTime: '오전 10:00',
+      location: '회의실 A',
+      isParticipating: true,
+    },
+  ];
 
   return (
     <div className="space-y-8 p-6">
@@ -174,14 +214,41 @@ export default function SharedComponents() {
           img=""
           onGroupCardClick={handleGroupCardClick}
         />
-        <div className="w-[25%] mb-2">
+        <div className="w-[400px] mb-2">
           <EventCard
-            title="동산 사이드 프로젝트 쫑파티"
-            groupName="동산"
-            dayCounts={40}
-            description="사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미 갈이 일정 잡아봐요~~"
+            eventId="sample-1"
+            eventName="동산 사이드 프로젝트 쫑파티"
+            startTime="오후 17:30"
+            location="사당역 5번 출구 앞"
+            isParticipating={false}
             onEventCardClick={handleEventCardClick}
           />
+        </div>
+      </section>
+
+      <section className="space-y-4 p-4 border rounded w-[450px]">
+        <Title1>날짜 + 이벤트 카드</Title1>
+        <div className="space-y-3">
+          {eventListData.map((event, index) => (
+            <div key={event.eventId} className="flex gap-3 items-start relative">
+              <div className="flex flex-col items-center relative pt-1">
+                <DateIcon date={event.date} index={index} />
+                {index < eventListData.length - 1 && (
+                  <div className="absolute top-[70px] left-1/2 transform -translate-x-1/2 w-[1px] h-[40px] bg-black-200"></div>
+                )}
+              </div>
+              <div className="flex-1">
+                <EventCard
+                  eventId={event.eventId}
+                  eventName={event.eventName}
+                  startTime={event.startTime}
+                  location={event.location}
+                  isParticipating={event.isParticipating}
+                  onEventCardClick={() => handleEventListItemClick(event.eventId)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>

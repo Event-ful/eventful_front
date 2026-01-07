@@ -40,27 +40,39 @@ const groupsData = [
 
 const activeEventsData = [
   {
-    id: 1,
-    title: '동산 사이드 프로젝트 종파티',
-    description: '사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미? 같이 일정 잡아봐요~~',
-    groupName: '동산팀',
-    dayCounts: 45,
+    eventId: '1',
+    date: '2024-01-15',
+    eventName: '동산 사이드 프로젝트 쫑파티',
+    startTime: '오후 17:30',
+    location: '사당역 5번 출구 앞',
+    isParticipating: false,
   },
   {
-    id: 2,
-    title: '이벤트를 개발팀',
-    description: '수요일 10시 반 온라인 회의 디코에서',
-    groupName: '개발팀',
-    dayCounts: 25,
+    eventId: '2',
+    date: '2024-01-16',
+    eventName: '동산 사이드 프로젝트 쫑파티',
+    startTime: '오후 17:30',
+    location: '사당역 5번 출구 앞',
+    isParticipating: true,
+  },
+  {
+    eventId: '3',
+    date: '2024-01-20',
+    eventName: '개발팀 온라인 회의',
+    startTime: '오전 11:30',
+    location: '디스코드',
+    isParticipating: true,
   },
 ];
 
 const endedEventsData = [
   {
-    id: 1,
-    title: '동산 사이드 프로젝트 종파티',
-    description: '사당역에서 저녁 6시 쫑파티! 메뉴는 쭈꾸미? 같이 일정 잡아봐요~~',
-    groupName: '동산팀',
+    eventId: '4',
+    date: '2024-01-10',
+    eventName: '동산 사이드 프로젝트 쫑파티',
+    startTime: '오후 18:00',
+    location: '사당역 5번 출구 앞',
+    isParticipating: true,
   },
 ];
 
@@ -69,13 +81,13 @@ export default function HomeForm() {
     console.log('그룹 카드 클릭:', groupId);
   };
 
-  const handleEventCardClick = (eventId: number) => {
+  const handleEventCardClick = (eventId: string) => {
     console.log('이벤트 카드 클릭:', eventId);
   };
 
   if (groupsData.length === 0) {
     return (
-      <div className="bg-white-50">
+      <div className="bg-white-50 w-full">
         <HomeBanner />
         <GuideCard cards={guideCardsData} />
       </div>
@@ -83,7 +95,7 @@ export default function HomeForm() {
   }
 
   return (
-    <div className="bg-white-50">
+    <div className="bg-white-50 w-full">
       <HomeBanner />
       <div className="pl-[43px] pr-[104px] py-[39px]">
         <div className="flex gap-[48px]">
@@ -113,20 +125,17 @@ export default function HomeForm() {
               {activeEventsData.length === 0 ? (
                 <EmptyState message="참여중인 이벤트가 없어요." />
               ) : (
-                <div>
-                  {activeEventsData.map((event, index) => (
-                    <div key={event.id}>
-                      <EventCard
-                        title={event.title}
-                        description={event.description}
-                        groupName={event.groupName}
-                        dayCounts={event.dayCounts}
-                        onEventCardClick={() => handleEventCardClick(event.id)}
-                      />
-                      {index < activeEventsData.length - 1 && (
-                        <hr className="my-3 border-t border-black-200" />
-                      )}
-                    </div>
+                <div className="space-y-3">
+                  {activeEventsData.map(event => (
+                    <EventCard
+                      key={event.eventId}
+                      eventId={event.eventId}
+                      eventName={event.eventName}
+                      startTime={event.startTime}
+                      location={event.location}
+                      isParticipating={event.isParticipating}
+                      onEventCardClick={() => handleEventCardClick(event.eventId)}
+                    />
                   ))}
                 </div>
               )}
@@ -138,19 +147,17 @@ export default function HomeForm() {
               {endedEventsData.length === 0 ? (
                 <EmptyState message="종료된 이벤트가 없어요." />
               ) : (
-                <div>
-                  {endedEventsData.map((event, index) => (
-                    <div key={event.id}>
-                      <EventCard
-                        title={event.title}
-                        description={event.description}
-                        groupName={event.groupName}
-                        onEventCardClick={() => handleEventCardClick(event.id)}
-                      />
-                      {index < endedEventsData.length - 1 && (
-                        <hr className="my-3 border-t border-black-200" />
-                      )}
-                    </div>
+                <div className="space-y-3">
+                  {endedEventsData.map(event => (
+                    <EventCard
+                      key={event.eventId}
+                      eventId={event.eventId}
+                      eventName={event.eventName}
+                      startTime={event.startTime}
+                      location={event.location}
+                      isParticipating={event.isParticipating}
+                      onEventCardClick={() => handleEventCardClick(event.eventId)}
+                    />
                   ))}
                 </div>
               )}
