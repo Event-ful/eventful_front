@@ -6,37 +6,8 @@ import GroupCard from '@/widgets/group/groupCard';
 import EventCard from '@/widgets/event/eventCard';
 import EmptyState from '@/shared/ui/emptyState';
 import { Title1 } from '@/shared/ui/typography';
-
-const groupsData = [
-  {
-    id: 1,
-    title: '우리끼리 골프',
-    description: 'WIcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임',
-    member: 51,
-    img: '',
-  },
-  {
-    id: 2,
-    title: '우리끼리 골프',
-    description: 'WIcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임',
-    member: 51,
-    img: '',
-  },
-  {
-    id: 3,
-    title: '우리끼리 골프',
-    description: 'WIcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임',
-    member: 51,
-    img: '',
-  },
-  {
-    id: 4,
-    title: '우리끼리 골프',
-    description: 'WIcome! 골프를 사랑하고 골프를 통해 멤버들간의 정을 쌓아가고자 하는 모임',
-    member: 51,
-    img: '',
-  },
-];
+import { useFetchGroups } from './fetchHome/model/queries';
+import { useNavigate } from 'react-router-dom';
 
 const activeEventsData = [
   {
@@ -77,15 +48,46 @@ const endedEventsData = [
 ];
 
 export default function HomeForm() {
+  const navigate = useNavigate();
+  const { data: groupsResponse, isLoading, isError } = useFetchGroups();
+
   const handleGroupCardClick = (groupId: number) => {
-    console.log('그룹 카드 클릭:', groupId);
+    navigate(`/group/${groupId}`);
   };
 
   const handleEventCardClick = (eventId: string) => {
     console.log('이벤트 카드 클릭:', eventId);
   };
 
-  if (groupsData.length === 0) {
+  const groups = groupsResponse?.data?.groups || [];
+
+  if (isLoading) {
+    return (
+      <div className="bg-white-50 w-full">
+        <HomeBanner />
+        <div className="pl-[43px] pr-[104px] py-[39px]">
+          <div className="flex items-center justify-center h-64">
+            <p>로딩 중...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="bg-white-50 w-full">
+        <HomeBanner />
+        <div className="pl-[43px] pr-[104px] py-[39px]">
+          <div className="flex items-center justify-center h-64">
+            <p>그룹 목록을 불러오는 중 오류가 발생했습니다.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (groups.length === 0) {
     return (
       <div className="bg-white-50 w-full">
         <HomeBanner />
@@ -103,14 +105,14 @@ export default function HomeForm() {
           <div className="w-[820px] flex-shrink-0">
             <HomeController />
             <div className="flex flex-wrap gap-[20px]">
-              {groupsData.map(group => (
-                <div key={group.id} className="w-[260px]">
+              {groups.map(group => (
+                <div key={group.groupId} className="w-[260px]">
                   <GroupCard
-                    title={group.title}
-                    description={group.description}
-                    member={group.member}
-                    img={group.img}
-                    onGroupCardClick={() => handleGroupCardClick(group.id)}
+                    title={group.groupName}
+                    description={group.groupDescription}
+                    member={group.memberCount}
+                    img={group.groupImageUrl}
+                    onGroupCardClick={() => handleGroupCardClick(group.groupId)}
                   />
                 </div>
               ))}
