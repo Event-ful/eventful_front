@@ -1,6 +1,8 @@
 import { SharedPage, SignupPage } from '@/pages/auth';
 import { HomePage } from '@/pages/home';
 import Layout from './layout';
+import NewGroup from '@/pages/group/ui/NewGroup.page';
+import GroupDetailPage from '@/pages/group/ui/Detail.page';
 import NewGroup from '@/pages/newGroup.page';
 import NewEvent from '@/pages/event/ui/newEvent';
 
@@ -11,7 +13,7 @@ export const routes = [
     children: [
       {
         element: <HomePage />,
-        path: 'home',
+        path: '',
       },
       {
         element: <SharedPage />,
@@ -20,6 +22,10 @@ export const routes = [
       {
         element: <NewGroup />,
         path: 'new_group',
+      },
+      {
+        element: <GroupDetailPage />,
+        path: 'group/:id',
       },
       {
         element: <NewEvent />,
